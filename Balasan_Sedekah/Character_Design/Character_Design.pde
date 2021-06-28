@@ -1,10 +1,11 @@
 int[] colorPalette = {#2a2329, #454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce, #deeafa, #56ad7a, #e8c170, #233f71, #546c96}; 
 float eyeWidth = 14, eyeHeight = 15;
-int[] blinkIntervals = {30, 60, 90, 120};
+int[] blinkIntervals = {60, 60, 90, 120};
 int counter = 0;
 
-float[] headDis = {0,0};
-float headRot = 0, torsoRot = 0, handRot = 0;
+PVector bgDis = new PVector(0, 0);
+PVector fgDis = new PVector(0, 0);
+float headRot = 0, torsoRot = 0, handRot = 0, legRot = 0;
 
 void setup()
 {
@@ -18,16 +19,34 @@ void setup()
 void draw()
 {
   counter++;
+  bgDis.x++;
   
-  headRot = sin((norm(counter, 0, 1)/15f)) * 3;
-  torsoRot = sin((norm(counter, 0, 1)/15f)) * 3;
-  handRot = sin((norm(counter, 0, 1)/15f)) * 30;
-  
-
+  if(frameToSec(counter) < 6)
+  {
+    headRot = sin((norm(counter, 0, 1)/15f)) * 3;
+    torsoRot = sin((norm(counter, 0, 1)/15f)) * 3;
+    handRot = sin((norm(counter, 0, 1)/15f)) * 30;
+    legRot = sin((norm(counter, 0, 1)/15f)) * 10;
+  }
+  else if(frameToSec(counter) < 7)
+  {
+    headRot = lerp(headRot,0, frameToSec(counter)/100);
+    torsoRot = lerp(torsoRot,0, frameToSec(counter)/100);
+    handRot = lerp(handRot,0, frameToSec(counter)/100);
+    legRot = lerp(legRot,0, frameToSec(counter)/100);
+  }
+  else if(frameToSec(counter) < 15)
+  {
+    headRot = sin((norm(counter, 0, 1)/15f)) * 3;
+    torsoRot = sin((norm(counter, 0, 1)/15f)) * 3;
+    handRot = -sin((norm(counter, 0, 1)/15f)) * 2;
+    legRot = sin((norm(counter, 0, 1)/15f)) * 0;
+  }  
   background(colorPalette[8]);
   textSize(18);
   fill(#FFFF00);
   text("FPS: " + round(frameRate), 20, 35);
+  text("ET : " + nf(frameToSec(counter), 0, 2), 21, 60);
   float i = random(0, 3);
   if (frameCount % blinkIntervals[(int) i] == 0)
   {
@@ -40,24 +59,37 @@ void draw()
     eyeHeight = 15;
   }
   drawFloor();
-
-  translate(width/4, height/7 + 18);
+  
+  /*
+  if(frameToSec(counter) > 7 && frameToSec(counter) < 10)
+  {
+    fgDis.x++;
+  }
+  if(frameToSec(counter) < 6.9)
+  {
+    translate(width/4, height/7 + 18);
+  }
+  else if(frameToSec(counter) > 6.8)
+  {
+    translate(width/4 + fgDis.x * 3, height/7 + 18 + fgDis.y);
+  }
+  */
 
   pushMatrix();
-  scale(0.8, 0.9);
-  drawPlant(240, 65);
+  translate(500, bgDis.y);
+  drawPlant(450, 300);
   popMatrix();
 
-  drawArm(285, 300, 1, 0.9, handRot, colorPalette[1], colorPalette[2]);
+  drawArm(585, 435, 1, 0.9, handRot, colorPalette[1], colorPalette[2]);
   
-  drawLeg(250, 302, 1.1, 1.1, colorPalette[1], #ffffff);
-  drawLeg(295, 303, 1.1, 1.1, colorPalette[7], #ffffff);
+  drawLeg(575, 465, 1.1, 1.1, -legRot, colorPalette[1], colorPalette[5]);
+  drawLeg(620, 466, 1.1, 1.1, legRot, colorPalette[7], colorPalette[5]);
   
-  drawTorso(290, 285, torsoRot);
+  drawTorso(590, 415, torsoRot);
   
-  drawHead(286, 298, -headRot);
+  drawHead(586, 428, -headRot);
   
-  drawArm(270, 242, 1.2, 1.1, -handRot, colorPalette[7], colorPalette[2]);
+  drawArm(522, 360, 1.2, 1.1, -handRot, colorPalette[7], colorPalette[2]);
 
   if (frameCount < 2)
   {
@@ -216,7 +248,6 @@ void drawTorso(float x, float y, float angle)
 }
 void drawArm(float x, float y, float scalarX, float scalarY, float angle, int colA, int colB)
 {
-  
   pushMatrix();
   scale(scalarX, scalarY);
   translate(x, y);
@@ -240,41 +271,43 @@ void drawArm(float x, float y, float scalarX, float scalarY, float angle, int co
   popMatrix();
 }
 
-void drawLeg(float x, float y, float scalarX, float scalarY, int colA, int colB)
+void drawLeg(float x, float y, float scalarX, float scalarY, float angle, int colA, int colB)
 {
   pushMatrix();
+  translate(x, y);
   scale(scalarX, scalarY);
+  rotate(radians(angle));
   createShape();
   beginShape();
   strokeWeight(4);
   fill(colB);
-  vertex(x-15, y+155);
-  vertex(x-15, y+165);
-  vertex(x+20, y+165);
-  vertex(x+20, y+155);
+  vertex(-15, 155);
+  vertex(-15, 165);
+  vertex(20, 165);
+  vertex(20, 155);
   endShape(CLOSE);
 
   createShape();
   beginShape();
   strokeWeight(4);
   fill(colA);
-  vertex(x-27, y);
-  vertex(x-27, y+65);
-  vertex(x-22, y+155);
-  vertex(x+27, y+155);
-  vertex(x+27, y+155);
-  vertex(x+22, y+69);
-  vertex(x+22, y);
+  vertex(-27, 0);
+  vertex(-27, 65);
+  vertex(-22, 155);
+  vertex(27, 155);
+  vertex(27, 155);
+  vertex(22, 69);
+  vertex(22, 0);
   endShape(CLOSE);
 
   createShape();
   beginShape();
   strokeWeight(4);
   fill(colA);
-  vertex(x+25, y+165);
-  vertex(x-17, y+165);
-  bezierVertex(x-35, y+165, x-40, y+175, x-35, y+187);
-  vertex(x+25, y+187);
+  vertex(25, 165);
+  vertex(-17, 165);
+  bezierVertex(-35, 165, -40, 175, -35, 187);
+  vertex(25, 187);
 
   endShape(CLOSE);
   
@@ -303,79 +336,84 @@ void drawFloor()
 }
 void drawPlant(float x, float y)
 {
+  pushMatrix();
+  translate(x, y);
+  scale(0.8, 0.9);
+  circle(0, 0, 50);
   createShape();
   beginShape();
   fill(colorPalette[9]);
-  strokeWeight(3);
-  vertex(x+433, y+425);
-  vertex(x+460, y+225);
-  vertex(x+468, y+225);
-  vertex(x+439, y+425);
+  strokeWeight(3.75);
+  vertex(433, 425);
+  vertex(460, 225);
+  vertex(468, 225);
+  vertex(439, 425);
   endShape(CLOSE);
 
-  pushMatrix();
-  translate(0, -40);
-  drawLeaf(x, y, PI/2.12, 3.21, 2.3, 1, 1.45, 3.5);
-  popMatrix();
+  drawLeaf(222, 210,  1.45, 1, PI/2.12, 3.2);
+  
   createShape();
   beginShape();
   fill(colorPalette[9]);
-  strokeWeight(3);
-  vertex(x+410, y+425);
-  vertex(x+410, y+190);
-  vertex(x+418, y+190);
-  vertex(x+418, y+425);
-  endShape(CLOSE);
-
-  pushMatrix();
-  translate(0, -40);
-  drawLeaf(x, y, PI/3, 2.38, 0.22, 1.45, 1.5, 2.4);
-  drawLeaf(x, y, 11*PI/6, 1.81, 5.6, .9, 1.1, 4);
-  drawLeaf(x, y, 5*PI/3, 1.55, 9.8, 1.45, 1.8, 2.75);
-  drawLeaf(x, y, 19.0*PI/12.0, 1.65, 12.7, 1.8, 2.25, 2);
-  drawLeaf(x, y, 5*PI/12, 2.85, 1.5, 1.45, 1.8, 2.75);
-  popMatrix();
-
-  createShape();
-  beginShape();
   strokeWeight(4);
+  vertex(410, 425);
+  vertex(410, 190);
+  vertex(418, 190);
+  vertex(418, 425);
+  endShape(CLOSE);
+
+  drawLeaf(180, 180, 1.7, 1.3, PI/3, 2.75);
+  drawLeaf(175, 130, 1.1, 1.1, 11*PI/6, 3.65);
+  drawLeaf(168, 220, 1.8, 1.45, 5*PI/3, 2.65);
+  drawLeaf(168, 280, 2.25, 1.8, 19.0*PI/12.0, 2.15);
+  drawLeaf(180, 290, 1.8, 1.45, PI/3, 2.75);
+
+  createShape();
+  beginShape();
+  strokeWeight(4.75);
   fill(colorPalette[9]);
-  vertex(x+375, y+520);
-  vertex(x+475, y+520);
-  vertex(x+490, y+425);
-  vertex(x+355, y+425);
+  vertex(375, 520);
+  vertex(475, 520);
+  vertex(490, 425);
+  vertex(355, 425);
   endShape(CLOSE);
 
   createShape();
   beginShape();
   fill(colorPalette[8]);
-  vertex(x+350, y+425);
-  vertex(x+495, y+425);
-  vertex(x+495, y+435);
-  vertex(x+350, y+435);
+  vertex(350, 425);
+  vertex(495, 425);
+  vertex(495, 435);
+  vertex(350, 435);
   endShape(CLOSE);
+  popMatrix();
 }
 
-void drawLeaf(float x, float y, float rotation, float deltaX, float deltaY, float scalarX, float scalarY, float strokeWeight)
+void drawLeaf(float x, float y, float scalarX, float scalarY, float angle, float strokeWeight)
 {
   pushMatrix();
-  strokeWeight(strokeWeight);
-  translate(deltaX * x, deltaY*y);
-  rotate(rotation);
+  translate(x, y);
   scale(scalarX, scalarY);
+  rotate(angle);
+  strokeWeight(strokeWeight);
   createShape();
   beginShape();
   fill(colorPalette[10]);
-  vertex(x, y);
-  bezierVertex(x-20, y-5, x-20, y-40, x, y-50);
-  bezierVertex(x+20, y-40, x+20, y-5, x, y);
+  vertex(0, 0);
+  bezierVertex(-20, -5, -20, -40, 0, -50);
+  bezierVertex(20, -40, 20, -5, 0, 0);
   endShape(CLOSE);
 
   createShape();
   beginShape();
   noFill();
-  vertex(x, y);
-  vertex(x, y-25);
+  vertex(0, 0);
+  vertex(0, -30);
   endShape();
   popMatrix();
+}
+
+static float frameToSec(float frame)
+{
+  return frame/60f;
 }
