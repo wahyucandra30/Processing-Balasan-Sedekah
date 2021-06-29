@@ -76,8 +76,8 @@ void draw()
   */
 
   pushMatrix();
-  translate(500, bgDis.y);
-  drawPlant(450, 300);
+  translate(bgDis.x * 4, bgDis.y);
+  drawPlant(500, 575, 0.8, 0.9);
   popMatrix();
 
   drawArm(585, 435, 1, 0.9, handRot, colorPalette[1], colorPalette[2]);
@@ -246,10 +246,10 @@ void drawTorso(float x, float y, float angle)
   endShape(CLOSE);
   popMatrix();
 }
-void drawArm(float x, float y, float scalarX, float scalarY, float angle, int colA, int colB)
+void drawArm(float x, float y, float xScale, float yScale, float angle, int colA, int colB)
 {
   pushMatrix();
-  scale(scalarX, scalarY);
+  scale(xScale, yScale);
   translate(x, y);
   rotate(radians(angle));
   fill(colB);
@@ -271,11 +271,11 @@ void drawArm(float x, float y, float scalarX, float scalarY, float angle, int co
   popMatrix();
 }
 
-void drawLeg(float x, float y, float scalarX, float scalarY, float angle, int colA, int colB)
+void drawLeg(float x, float y, float xScale, float yScale, float angle, int colA, int colB)
 {
   pushMatrix();
   translate(x, y);
-  scale(scalarX, scalarY);
+  scale(xScale, yScale);
   rotate(radians(angle));
   createShape();
   beginShape();
@@ -334,66 +334,66 @@ void drawFloor()
   vertex(width - width/6, height - 90);
   endShape();
 }
-void drawPlant(float x, float y)
+void drawPlant(float x, float y, float xScale, float yScale)
 {
   pushMatrix();
   translate(x, y);
-  scale(0.8, 0.9);
+  scale(xScale, yScale);
   circle(0, 0, 50);
   createShape();
   beginShape();
   fill(colorPalette[9]);
   strokeWeight(3.75);
-  vertex(433, 425);
-  vertex(460, 225);
-  vertex(468, 225);
-  vertex(439, 425);
+  vertex(-17,  -25);
+  vertex(10,  -225);
+  vertex(18,  -225);
+  vertex(-9,  -25);
   endShape(CLOSE);
 
-  drawLeaf(222, 210,  1.45, 1, PI/2.12, 3.2);
+  drawLeaf(10,  -155,  1.45, 1, PI/2.12, 3.2);
   
   createShape();
   beginShape();
   fill(colorPalette[9]);
   strokeWeight(4);
-  vertex(410, 425);
-  vertex(410, 190);
-  vertex(418, 190);
-  vertex(418, 425);
+  vertex(-40,  -25);
+  vertex(-40,  -260);
+  vertex(-32,  -260);
+  vertex(-32,  -25);
   endShape(CLOSE);
 
-  drawLeaf(180, 180, 1.7, 1.3, PI/3, 2.75);
-  drawLeaf(175, 130, 1.1, 1.1, 11*PI/6, 3.65);
-  drawLeaf(168, 220, 1.8, 1.45, 5*PI/3, 2.65);
-  drawLeaf(168, 280, 2.25, 1.8, 19.0*PI/12.0, 2.15);
-  drawLeaf(180, 290, 1.8, 1.45, PI/3, 2.75);
+  drawLeaf(-30,  -190, 1.7, 1.3, PI/3, 2.75);
+  drawLeaf(-35,  -235, 1.1, 1.1, 11*PI/6, 3.65);
+  drawLeaf(-42,  -155, 1.8, 1.45, 5*PI/3, 2.65);
+  drawLeaf(-42,  -100, 2.25, 1.8, 19.0*PI/12.0, 2.15);
+  drawLeaf(-30,  -85, 1.8, 1.45, PI/3, 2.75);
 
   createShape();
   beginShape();
   strokeWeight(4.75);
   fill(colorPalette[9]);
-  vertex(375, 520);
-  vertex(475, 520);
-  vertex(490, 425);
-  vertex(355, 425);
+  vertex(-75, 70);
+  vertex(25, 70);
+  vertex(40, -25);
+  vertex(-95, -25);
   endShape(CLOSE);
 
   createShape();
   beginShape();
   fill(colorPalette[8]);
-  vertex(350, 425);
-  vertex(495, 425);
-  vertex(495, 435);
-  vertex(350, 435);
+  vertex(-100,  -25);
+  vertex(45,  -25);
+  vertex(45,  -15);
+  vertex(-100,  -15);
   endShape(CLOSE);
   popMatrix();
 }
 
-void drawLeaf(float x, float y, float scalarX, float scalarY, float angle, float strokeWeight)
+void drawLeaf(float x, float y, float xScale, float yScale, float angle, float strokeWeight)
 {
   pushMatrix();
   translate(x, y);
-  scale(scalarX, scalarY);
+  scale(xScale, yScale);
   rotate(angle);
   strokeWeight(strokeWeight);
   createShape();
