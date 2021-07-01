@@ -10,6 +10,7 @@ PVector fgDis = new PVector(0, 0);
 float headRot_B = 0, torsoRot_B = 0, handRotLeft_B = 0, handRotRight_B = 0, legRot_B = 0;
 //Pak Yanto
 float headRot_Y = 0, torsoRot_Y = 0, handRotLeft_Y = 0, handRotRight_Y = 0, legRot_Y = 0;
+float[] mouthVerts_Y = {-30, -64, -28, -56, -18, -56, -16, -64};
 
 void setup()
 {
@@ -33,12 +34,12 @@ void draw()
   {
     drawScene1();
   }
-  filter(ERODE/1);
+  filter(ERODE);
 }
 void drawScene1()
 {
   
-  if (frameToSec(counter) < 12)
+  if (frameToSec(counter) < 14)
   {
     bgDis.x++;
     headRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
@@ -49,7 +50,7 @@ void drawScene1()
     handRotLeft_Y = -15;
     handRotRight_Y = -30;
   } 
-  else if (frameToSec(counter) < 13)
+  else if (frameToSec(counter) < 15)
   {
     headRot_B = lerp(headRot_B, 0, frameToSec(counter)/100);
     torsoRot_B = lerp(torsoRot_B, 0, frameToSec(counter)/100);
@@ -64,7 +65,14 @@ void drawScene1()
     handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 2;
     handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 2;
     legRot_B = sin((norm(counter, 0, 1)/15f)) * 0;
-  }  
+  }
+  if (frameToSec(counter) > 18 && frameToSec(counter) < 19.25)
+  {
+    mouthVerts_Y[1] += 0.1;
+    mouthVerts_Y[3] -= 0.1;
+    mouthVerts_Y[5] -= 0.1;
+    mouthVerts_Y[7] += 0.1;
+  }
 
   float i = random(0, 3);
   if (frameCount % blinkIntervals[(int) i] == 0)
@@ -80,7 +88,7 @@ void drawScene1()
   
   drawFloor();
 
-  if (frameToSec(counter) > 13 && frameToSec(counter) < 13.25)
+  if (frameToSec(counter) > 15 && frameToSec(counter) < 15.4)
   {
     fgDis.x++;
   }
@@ -88,12 +96,14 @@ void drawScene1()
   pushMatrix();
   translate(bgDis.x * 4, bgDis.y);
   translate(fgDis.x * 10, fgDis.y);
+  drawVent(-950, 575);
+  drawBBoard(120, 350, 400, 250);
   drawDoor(500, 405, 270, 450);
   drawDoubleDoor(-500, 405, 270, 450);
   
   drawPlant(-100, 575, 0.8, 0.9);
   drawPlant(-1200, 575, 0.8, 0.9);
-  drawYanto(-3200, 60, "sitting");
+  drawYanto(-3800, 60, "sitting");
   popMatrix();
 
   translate(fgDis.x * 10, fgDis.y);
@@ -179,7 +189,25 @@ void drawHeadYanto(float x, float y, float xScale, float yScale, float angle)
   bezierVertex(42, -108, 74, -99, 65, -75);
   bezierVertex(63, -64, 55, -53, 36, -64);
   endShape();
-
+  
+  //Peci cap
+  fill(colorPalette[15]);
+  createShape();
+  beginShape();
+  vertex(60, -125);
+  bezierVertex(60, -185, -58, -185,-58, -125);
+  endShape(CLOSE);
+  
+  //Peci brim
+  fill(colorPalette[15]);
+  createShape();
+  beginShape();
+  vertex(-60, -112);
+  vertex(62, -112);
+  vertex(62, -126);
+  vertex(-60, -126);
+  endShape(CLOSE);
+  
   //Daun telinga
   createShape();
   beginShape();
@@ -197,13 +225,16 @@ void drawHeadYanto(float x, float y, float xScale, float yScale, float angle)
   bezierVertex(40, -83, 46, -91, 48, -76);
   endShape();
 
-  drawCustomEllipse(-25, -54, 15, 6, colorPalette[3]); //Mulut
 
-  //Kumis
+  //Mulut
   noFill();
   stroke(colorPalette[1]);
-  strokeWeight(15);
-  bezier(-36, -56, -43, -65, -6, -65, -14, -57);
+  pushMatrix();
+  translate(-4, 0);
+  
+  bezier(mouthVerts_Y[0], mouthVerts_Y[1], mouthVerts_Y[2], mouthVerts_Y[3], mouthVerts_Y[4], mouthVerts_Y[5], mouthVerts_Y[6], mouthVerts_Y[7]);
+  
+  popMatrix();
 
   drawCustomEllipse(-40, -81, eyeWidth, eyeHeight, colorPalette[1]);//Mata kiri
   drawCustomEllipse(-10, -81, eyeWidth, eyeHeight, colorPalette[1]);//Mata kanan
@@ -549,6 +580,8 @@ void drawDoor(float x, float y, float w, float h)
 {
   pushMatrix();
   translate(x, y);
+  stroke(colorPalette[16]);
+  strokeWeight(4);
   fill(colorPalette[14]);
   rect(0, 0, w/1.2, h); //Base
   fill(colorPalette[15]);
@@ -560,6 +593,8 @@ void drawDoubleDoor(float x, float y, float w, float h)
 {
   pushMatrix();
   translate(x, y);
+  stroke(colorPalette[16]);
+  strokeWeight(4);
   fill(colorPalette[14]);
   rect(-w/1.2, 0, w/1.2, h); //Base L
   rect(0, 0, w/1.2, h); //Base R
@@ -567,6 +602,45 @@ void drawDoubleDoor(float x, float y, float w, float h)
   rect(-w/1.75, 25, 15, 50); //Handle L
   rect(-w/4, 25, 15, 50); //Handle R
   rect(w/2.2, 0, w/9.8, h); //Side
+  popMatrix();
+}
+void drawBBoard(float x, float y, float w, float h)
+{
+  pushMatrix();
+  translate(x, y);
+  stroke(colorPalette[16]);
+  strokeWeight(4);
+  fill(colorPalette[15]);
+  rect(-w/1.95, 0, w/30, h); //Side
+  fill(colorPalette[14]);
+  rect(0, 0, w, h); //Frame
+  fill(colorPalette[15]);
+  noStroke();
+  rect(1, 0, w/1.075, h/1.1); //Base
+  //Papers
+  fill(colorPalette[14]);
+  rect(-100, 0, 60, 75);
+  rect(-125, -50, 50, 60);
+  rect(10, -25, 50, 60);
+  rect(-25, 50, 50, 60);
+  rect(100, 10, 100, 125);
+  popMatrix();
+}
+void drawVent(float x, float y)
+{
+  pushMatrix();
+  translate(x, y);
+  stroke(colorPalette[16]);
+  strokeWeight(4);
+  fill(colorPalette[14]);
+  rect(0, 0, 125, 70); //Base
+  //Holes
+  strokeWeight(6);
+  line(-40, -20, -40, 20);
+  line(-20, -20, -20, 20);
+  line(0, -20, 0, 20);
+  line(19, -20, 19, 20);
+  line(39, -20, 39, 20);
   popMatrix();
 }
 void drawFloor()
