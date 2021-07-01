@@ -1,4 +1,5 @@
-int[] colorPalette = {#2a2329, #454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce, #deeafa, #56ad7a, #e8c170, #233f71, #546c96, #d9ddef, #c3c5e6}; 
+int[] colorPalette = {#2a2329,#454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce,
+                      #deeafa, #56ad7a, #eab353, #233f71, #546c96, #e9edf3, #d1d5db, #83858b}; 
 float eyeWidth = 14, eyeHeight = 15;
 int[] blinkIntervals = {60, 60, 90, 120};
 int counter = 0;
@@ -24,7 +25,7 @@ void draw()
   counter++;
   background(colorPalette[14]);
   textSize(18);
-  fill(#FFFF00);
+  fill(color(0));
   text("FPS: " + round(frameRate), 20, 35);
   text("ET : " + nf(frameToSec(counter), 0, 2), 21, 60);
 
@@ -75,6 +76,8 @@ void drawScene1()
     eyeWidth = 14;
     eyeHeight = 15;
   }
+  drawWall();
+  
   drawFloor();
 
   if (frameToSec(counter) > 13 && frameToSec(counter) < 13.25)
@@ -82,10 +85,12 @@ void drawScene1()
     fgDis.x++;
   }
 
-  
   pushMatrix();
   translate(bgDis.x * 4, bgDis.y);
   translate(fgDis.x * 10, fgDis.y);
+  drawDoor(500, 405, 270, 450);
+  drawDoubleDoor(-500, 405, 270, 450);
+  
   drawPlant(-100, 575, 0.8, 0.9);
   drawPlant(-1200, 575, 0.8, 0.9);
   drawYanto(-3200, 60, "sitting");
@@ -318,6 +323,7 @@ void drawTorsoSuit(float x, float y, float xScale, float yScale, float angle)
   translate(x, y);
   rotate(radians(angle));
   scale(xScale, yScale);
+  
   //Badan
   createShape();
   beginShape();
@@ -348,6 +354,7 @@ void drawTorsoSuit(float x, float y, float xScale, float yScale, float angle)
 
   //Pola dasi
   strokeCap(SQUARE);
+  strokeWeight(7);
   stroke(colorPalette[13]);
   line(-33, 0, -15, 17);
   line(-39, 18, -17, 39);
@@ -526,32 +533,69 @@ void drawLegBent(float x, float y, float xScale, float yScale, float angle, int 
 
   popMatrix();
 }
-void drawFloor()
+void drawWall()
 {
   createShape();
   beginShape();
   noStroke();
   fill(colorPalette[15]);
+  vertex(0, height/1.45);
+  vertex(width, height/1.45);
+  vertex(width, height);
+  vertex(0, height);
+  endShape(CLOSE);
+}
+void drawDoor(float x, float y, float w, float h)
+{
+  pushMatrix();
+  translate(x, y);
+  fill(colorPalette[14]);
+  rect(0, 0, w/1.2, h); //Base
+  fill(colorPalette[15]);
+  rect(-w/4, 25, 15, 50); //Handle
+  rect(w/2.2, 0, w/9.8, h); //Side
+  popMatrix();
+}
+void drawDoubleDoor(float x, float y, float w, float h)
+{
+  pushMatrix();
+  translate(x, y);
+  fill(colorPalette[14]);
+  rect(-w/1.2, 0, w/1.2, h); //Base L
+  rect(0, 0, w/1.2, h); //Base R
+  fill(colorPalette[15]);
+  rect(-w/1.75, 25, 15, 50); //Handle L
+  rect(-w/4, 25, 15, 50); //Handle R
+  rect(w/2.2, 0, w/9.8, h); //Side
+  popMatrix();
+}
+void drawFloor()
+{
+  createShape();
+  beginShape();
+  noStroke();
+  fill(colorPalette[14]);
   vertex(0, height - 90);
   vertex(width, height - 90);
   vertex(width, height);
   vertex(0, height);
   endShape(CLOSE);
-
+  
   createShape();
   beginShape();
-  strokeWeight(4.5);
-  stroke(colorPalette[0]);
-  vertex(width/6, height - 90);
-  vertex(width - width/6, height - 90);
+  strokeWeight(4);
+  stroke(colorPalette[16]);
+  vertex(0, height-90);
+  vertex(width, height-90);
   endShape();
+  
 }
 void drawPlant(float x, float y, float xScale, float yScale)
 {
   pushMatrix();
   translate(x, y);
   scale(xScale, yScale);
-  circle(0, 0, 50);
+  stroke(colorPalette[0]);
   createShape();
   beginShape();
   fill(colorPalette[9]);
@@ -614,7 +658,7 @@ void drawLeaf(float x, float y, float xScale, float yScale, float angle, float s
   vertex(0, 0);
   bezierVertex(-20, -5, -20, -40, 0, -50);
   bezierVertex(20, -40, 20, -5, 0, 0);
-  endShape(CLOSE);
+  endShape(CLOSE);  
 
   createShape();
   beginShape();
