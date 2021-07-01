@@ -1,3 +1,5 @@
+import processing.sound.*;
+
 int[] colorPalette = {#2a2329,#454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce,
                       #deeafa, #56ad7a, #eab353, #233f71, #546c96, #e9edf3, #d1d5db, #83858b}; 
 float eyeWidth = 14, eyeHeight = 15;
@@ -27,8 +29,11 @@ void setup()
 void draw()
 {
   counter++;
+  textSize(18);
+  fill(color(0));
+  text("FPS: " + round(frameRate), 20, 35);
+  text("ET : " + nf(frameToSec(counter), 0, 2), 21, 60);
   background(colorPalette[14]);
-  
 
   if(frameToSec(counter) < 10)
   {
@@ -38,17 +43,14 @@ void draw()
   {
     drawScene1C(30, 10);
   }
-  textSize(18);
-  fill(color(0));
-  text("FPS: " + round(frameRate), 20, 35);
-  text("ET : " + nf(frameToSec(counter), 0, 2), 21, 60);
+  
   filter(ERODE);
 }
 void drawScene1A(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
   drawClock(width/2, height/2);
-  if(progress > 0.1)
+  if(progress > 0.075)
   {
     if(fadeAlpha > 1)
     {
@@ -170,13 +172,13 @@ void drawScene1C(float duration, float position)
   {
     headRot_Y = lerp(headRot_Y, 10, frameToSec(counter)/400);
   }
-  if (progress > 0.6 && progress < 0.64167)
+  if (progress > 0.65 && progress < 0.69167)
   {
     mouthVerts_Y[1] += 0.1;
     mouthVerts_Y[3] -= 0.1;
     mouthVerts_Y[5] -= 0.1;
     mouthVerts_Y[7] += 0.1;
-    headRot_Y = lerp(headRot_Y, -10, frameToSec(counter)/400);
+    headRot_Y = lerp(headRot_Y, -10, frameToSec(counter)/500);
   }
 
   float i = random(0, 3);

@@ -37,8 +37,8 @@ void drawChair(float x, float y)
   //vertex(-25, 100);
   vertex(-35, 100);
   vertex(-38, 113);
-  vertex(10, 113);
-  vertex(7, 100);
+  vertex(8, 113);
+  vertex(5, 100);
   endShape(CLOSE);
   fill(colorPalette[8]);
   rect(0, 0, 150, 20, 4*PI); //Cushion
