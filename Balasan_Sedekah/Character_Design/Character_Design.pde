@@ -4,6 +4,9 @@ float eyeWidth = 14, eyeHeight = 15;
 int[] blinkIntervals = {60, 60, 90, 120};
 int counter = 0;
 
+color fadeAlpha = 255;
+float secondHandAngle = 90;
+
 PVector bgDis = new PVector(0, 0);
 PVector fgDis = new PVector(0, 0);
 //Pak Budi
@@ -25,20 +28,118 @@ void draw()
 {
   counter++;
   background(colorPalette[14]);
+  
+
+  if(frameToSec(counter) < 10)
+  {
+    drawScene1A(10, 0);
+  }
+  else if(frameToSec(counter) < 40)
+  {
+    drawScene1C(30, 10);
+  }
   textSize(18);
   fill(color(0));
   text("FPS: " + round(frameRate), 20, 35);
   text("ET : " + nf(frameToSec(counter), 0, 2), 21, 60);
-
-  if(frameToSec(counter) < 30)
-  {
-    drawScene1();
-  }
   filter(ERODE);
 }
-void drawScene1()
+void drawScene1A(float duration, float position)
 {
-  if (frameToSec(counter) < 14)
+  float progress = (frameToSec(counter)-position)/duration;
+  drawClock(width/2, height/2);
+  if(progress > 0.1)
+  {
+    if(fadeAlpha > 1)
+    {
+      fadeAlpha--;
+    }
+    else
+    {
+      fadeAlpha = 1;
+    }
+  }
+  noStroke();
+  fill(color(0, fadeAlpha));
+  rect(0, 0, width, height);
+}
+void drawClock(float x, float y)
+{
+  pushMatrix();
+  stroke(colorPalette[16]);
+  fill(colorPalette[15]);
+  translate(x, y);
+  circle(0, 0, 500); //Frame
+  noStroke();
+  fill(255);
+  circle(0, 0, 450); //Base
+  
+  fill(colorPalette[0]);
+  stroke(colorPalette[16]);
+  
+  strokeWeight(8);
+  drawHourLabel(radians(30)); //1:00
+  drawHourLabel(radians(60)); //2:00
+  line(200, 0, 175, 0); //3:00
+  drawHourLabel(radians(120)); //4:00
+  drawHourLabel(radians(150)); //5:00
+  line(0, 200, 0, 175); //6:00
+  drawHourLabel(radians(210)); //7:00
+  drawHourLabel(radians(240)); //8:00
+  line(-200, 0, -175, 0); //9:00
+  drawHourLabel(radians(300)); //10:00
+  drawHourLabel(radians(330)); //11:00
+  line(0, -200, 0, -175); //12:00
+  
+  if(frameToSec(counter) == round(frameToSec(counter)))
+  {
+    secondHandAngle += 6;
+  }
+  drawSecondHand(radians(secondHandAngle));
+  drawHourHand(radians(-2));
+  drawMinuteHand(radians(-30));
+  
+  popMatrix();
+}
+void drawHourHand(float angle)
+{
+  pushMatrix();
+  strokeWeight(12);
+  stroke(colorPalette[0]);
+  rotate(angle);
+  line(0, 0, 0, -75);
+  popMatrix();
+}
+void drawMinuteHand(float angle)
+{
+  pushMatrix();
+  strokeWeight(10);
+  stroke(colorPalette[0]);
+  rotate(angle);
+  line(0, 0, 0, -150);
+  popMatrix();
+}
+void drawSecondHand(float angle)
+{
+  pushMatrix();
+  strokeWeight(4);
+  stroke(colorPalette[3]);
+  rotate(angle);
+  line(0, 0, 0, -160);
+  popMatrix();
+}
+void drawHourLabel(float angle)
+{
+  pushMatrix();
+  strokeWeight(6);
+  rotate(angle);
+  line(0, -200, 0, -185);
+  popMatrix();
+}
+void drawScene1C(float duration, float position)
+{
+  float progress = (frameToSec(counter)-position)/duration;
+  if (progress < 0.467)
   {
     bgDis.x++;
     headRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
@@ -49,7 +150,7 @@ void drawScene1()
     handRotLeft_Y = -15;
     handRotRight_Y = -30;
   } 
-  else if (frameToSec(counter) < 15)
+  else if (progress < 0.5)
   {
     headRot_B = lerp(headRot_B, 0, frameToSec(counter)/100);
     torsoRot_B = lerp(torsoRot_B, 0, frameToSec(counter)/100);
@@ -65,11 +166,11 @@ void drawScene1()
     handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 2;
     legRot_B = sin((norm(counter, 0, 1)/15f)) * 0;
   }
-  if(frameToSec(counter) > 15 && frameToSec(counter) < 16.25)
+  if(progress > 0.5 && progress < 0.5417)
   {
     headRot_Y = lerp(headRot_Y, 10, frameToSec(counter)/400);
   }
-  if (frameToSec(counter) > 18 && frameToSec(counter) < 19.25)
+  if (progress > 0.6 && progress < 0.64167)
   {
     mouthVerts_Y[1] += 0.1;
     mouthVerts_Y[3] -= 0.1;
@@ -92,7 +193,7 @@ void drawScene1()
   
   drawFloor();
 
-  if (frameToSec(counter) > 15 && frameToSec(counter) < 15.375)
+  if (progress > 0.5 && progress < 0.5125)
   {
     fgDis.x++;
   }
@@ -135,7 +236,7 @@ void drawScene1()
   popMatrix();
 
   translate(fgDis.x * 10, fgDis.y);
-  drawBudi(100, 0, "standing");
+  drawBudi(125, 0, "standing");
   
 }
 void drawBudi(float x, float y, String stance)
