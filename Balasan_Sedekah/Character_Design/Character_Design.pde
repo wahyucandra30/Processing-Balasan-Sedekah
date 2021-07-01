@@ -38,7 +38,6 @@ void draw()
 }
 void drawScene1()
 {
-  
   if (frameToSec(counter) < 14)
   {
     bgDis.x++;
@@ -66,12 +65,17 @@ void drawScene1()
     handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 2;
     legRot_B = sin((norm(counter, 0, 1)/15f)) * 0;
   }
+  if(frameToSec(counter) > 15 && frameToSec(counter) < 16.25)
+  {
+    headRot_Y = lerp(headRot_Y, 10, frameToSec(counter)/400);
+  }
   if (frameToSec(counter) > 18 && frameToSec(counter) < 19.25)
   {
     mouthVerts_Y[1] += 0.1;
     mouthVerts_Y[3] -= 0.1;
     mouthVerts_Y[5] -= 0.1;
     mouthVerts_Y[7] += 0.1;
+    headRot_Y = lerp(headRot_Y, -10, frameToSec(counter)/400);
   }
 
   float i = random(0, 3);
@@ -88,7 +92,7 @@ void drawScene1()
   
   drawFloor();
 
-  if (frameToSec(counter) > 15 && frameToSec(counter) < 15.4)
+  if (frameToSec(counter) > 15 && frameToSec(counter) < 15.375)
   {
     fgDis.x++;
   }
@@ -96,6 +100,25 @@ void drawScene1()
   pushMatrix();
   translate(bgDis.x * 4, bgDis.y);
   translate(fgDis.x * 10, fgDis.y);
+  fill(colorPalette[9]);
+  
+  rect(-1500, 350, 250, 200);//Window R
+  rect(-1780, 350, 250, 200);//Window L
+  
+  noStroke();
+  pushMatrix();
+  translate(bgDis.x/4, 0);
+  drawSun(-1850, 310);
+  popMatrix();
+  
+  fill(colorPalette[14]);
+  stroke(colorPalette[16]);
+  //Separator
+  rect(-1640, 350, 28, 200);
+  noStroke();
+  rect(-1640, 200, 24, 200);
+  rect(-1640, 370, 24, 200);
+  
   drawVent(-950, 575);
   drawAC(-1100, 100);
   drawBBoard(120, 350, 400, 250);
@@ -104,7 +127,11 @@ void drawScene1()
   
   drawPlant(-100, 575, 0.8, 0.9);
   drawPlant(-1200, 575, 0.8, 0.9);
+  
+  drawChair(-3200, 600);
   drawYanto(-3800, 60, "sitting");
+  //drawTable(-3150, 560);
+  drawTable(-2900, 550);
   popMatrix();
 
   translate(fgDis.x * 10, fgDis.y);
@@ -577,6 +604,20 @@ void drawWall()
   vertex(0, height);
   endShape(CLOSE);
 }
+void drawSun(float x, float y)
+{
+  pushMatrix();
+  translate(x, y);
+  fill(colorPalette[11], 25);
+  circle(0, 0, 125);
+  fill(colorPalette[11], 50);
+  circle(0, 0, 100);
+  fill(colorPalette[11], 75);
+  circle(0, 0, 75);
+  fill(colorPalette[11]);
+  circle(0, 0, 50);
+  popMatrix();
+}
 void drawDoor(float x, float y, float w, float h)
 {
   pushMatrix();
@@ -701,6 +742,76 @@ void drawFloor()
   vertex(width, height-90);
   endShape();
   
+}
+void drawChair(float x, float y)
+{
+  pushMatrix();
+  translate(x, y);
+  fill(colorPalette[15]);
+  rect(-15, 32.5, 20, 65); //Shaft
+  //Bot
+  createShape();
+  beginShape();
+  //vertex(-25, 100);
+  vertex(-35, 60);
+  vertex(-38, 73);
+  vertex(8, 73);
+  vertex(5, 60);
+  endShape(CLOSE);
+  fill(colorPalette[8]);
+  rect(0, 0, 150, 20, 4*PI); //Cushion
+  popMatrix();
+}
+void drawTable(float x, float y)
+{
+  pushMatrix();
+  translate(x, y);
+  stroke(colorPalette[0]);
+  
+  fill(colorPalette[0]);
+  noStroke();
+  
+  //Leg - Back Right
+  createShape();
+  beginShape();
+  vertex(95, 2);
+  vertex(80, 126);
+  vertex(92.5, 126);
+  vertex(106.5, 2);
+  endShape();
+  
+  fill(colorPalette[6]);
+  stroke(colorPalette[0]);
+  //Leg - Back Left
+  createShape();
+  beginShape();
+  vertex(-150, 2);
+  vertex(-165, 126);
+  vertex(-152.5, 126);
+  vertex(-138.5, 2);
+  endShape();
+  
+  //Leg - Front Left
+  createShape();
+  beginShape();
+  vertex(-107, 6);
+  vertex(-90, 130);
+  vertex(-77.5, 130);
+  vertex(-95.5, 6);
+  endShape();
+  
+  //Leg - Front Right
+  createShape();
+  beginShape();
+  vertex(143, 6);
+  vertex(160, 130);
+  vertex(172.5, 130);
+  vertex(154.5, 6);
+  endShape();
+  
+  rect(0, 0, 360, 12);//Tabletop
+  
+  popMatrix();
 }
 void drawPlant(float x, float y, float xScale, float yScale)
 {
