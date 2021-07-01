@@ -97,6 +97,7 @@ void drawScene1()
   translate(bgDis.x * 4, bgDis.y);
   translate(fgDis.x * 10, fgDis.y);
   drawVent(-950, 575);
+  drawAC(-1100, 100);
   drawBBoard(120, 350, 400, 250);
   drawDoor(500, 405, 270, 450);
   drawDoubleDoor(-500, 405, 270, 450);
@@ -596,7 +597,7 @@ void drawDoubleDoor(float x, float y, float w, float h)
   stroke(colorPalette[16]);
   strokeWeight(4);
   fill(colorPalette[14]);
-  rect(-w/1.2, 0, w/1.2, h); //Base L
+  rect(-w/1.25, 0, w/1.25, h); //Base L
   rect(0, 0, w/1.2, h); //Base R
   fill(colorPalette[15]);
   rect(-w/1.75, 25, 15, 50); //Handle L
@@ -641,6 +642,43 @@ void drawVent(float x, float y)
   line(0, -20, 0, 20);
   line(19, -20, 19, 20);
   line(39, -20, 39, 20);
+  popMatrix();
+}
+void drawAC(float x, float y)
+{
+  pushMatrix();
+  translate(x, y);
+  stroke(colorPalette[16]);
+  strokeWeight(3.5);
+  //Side
+  fill(colorPalette[15]);
+  createShape();
+  beginShape();
+  vertex(-140, -45);
+  bezierVertex(-170, -45, -170, -45, -170, -15);
+  vertex(-170, 30);
+  vertex(-120, 30);
+  vertex(-120, -45);
+  endShape(CLOSE);
+  
+  //Side box
+  fill(colorPalette[14]);
+  rect(-157, -15, 25, 25);
+  
+  //Front
+  fill(colorPalette[14]);
+  createShape();
+  beginShape();
+  vertex(45, 30);
+  bezierVertex(105, 30, 105, 15, 105, -25);
+  bezierVertex(105, -45, 105, -45, 55, -45);
+  vertex(-125, -45);
+  bezierVertex(-124, 0, -125, 25, -160, 30);
+  endShape(CLOSE);
+  
+  //Vent
+  line(-130, 10, 99, 10);
+  line(-135, 18, 97, 18);
   popMatrix();
 }
 void drawFloor()
@@ -693,7 +731,7 @@ void drawPlant(float x, float y, float xScale, float yScale)
   endShape(CLOSE);
 
   drawLeaf(-30, -190, 1.7, 1.3, PI/3, 2.25);
-  drawLeaf(-35, -235, 1.1, 1.1, 11*PI/6, 3.15);
+  drawLeaf(-33, -235, 1.1, 1.1, 11*PI/6, 3.15);
   drawLeaf(-42, -155, 1.8, 1.45, 5*PI/3, 2.15);
   drawLeaf(-42, -100, 2.25, 1.8, 19.0*PI/12.0, 1.65);
   drawLeaf(-30, -85, 1.8, 1.45, PI/3, 2.25);

@@ -19,6 +19,7 @@ void draw()
 {
   background(colorPalette[14]);
   drawYanto(0, 60, "sitting");
+  drawAC(width/2, 100);
   filter(ERODE);
 }
 void drawYanto(float x, float y, String stance)
@@ -133,6 +134,42 @@ void drawHeadYanto(float x, float y, float xScale, float yScale, float angle)
   drawCustomEllipse(-40, -81, eyeWidth, eyeHeight, colorPalette[1]);//Mata kiri
   drawCustomEllipse(-10, -81, eyeWidth, eyeHeight, colorPalette[1]);//Mata kanan
 
+  popMatrix();
+}
+void drawAC(float x, float y)
+{
+  pushMatrix();
+  translate(x, y);
+  stroke(colorPalette[16]);
+  //Side
+  fill(colorPalette[15]);
+  createShape();
+  beginShape();
+  vertex(-140, -45);
+  bezierVertex(-170, -45, -170, -45, -170, -15);
+  vertex(-170, 30);
+  vertex(-120, 30);
+  vertex(-120, -45);
+  endShape(CLOSE);
+  
+  //Side box
+  fill(colorPalette[14]);
+  rect(-170, -30, 25, 25);
+  
+  //Front
+  fill(colorPalette[14]);
+  createShape();
+  beginShape();
+  vertex(45, 30);
+  bezierVertex(105, 30, 105, 15, 105, -25);
+  bezierVertex(105, -45, 105, -45, 55, -45);
+  vertex(-125, -45);
+  bezierVertex(-124, 0, -125, 25, -160, 30);
+  endShape(CLOSE);
+  
+  //Vent
+  line(-130, 10, 99, 10);
+  line(-135, 18, 97, 18);
   popMatrix();
 }
 void drawCustomEllipse(float x, float y, float w, float h, int col)
