@@ -1,5 +1,7 @@
 import processing.sound.*;
 
+SoundFile s_clock_ticking, s_office_ambience, s_narrator_1;
+
 int[] colorPalette = {#2a2329,#454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce,
                       #deeafa, #56ad7a, #eab353, #233f71, #546c96, #e9edf3, #d1d5db, #83858b}; 
 float eyeWidth = 14, eyeHeight = 15;
@@ -25,24 +27,38 @@ void setup()
   strokeWeight(3.5);
   hint(ENABLE_STROKE_PURE);
   strokeCap(ROUND);
+  s_clock_ticking = new SoundFile(this, "sounds/clock-ticking.wav");
+  s_office_ambience = new SoundFile(this, "sounds/office-ambience.wav");
+  s_narrator_1 = new SoundFile(this, "sounds/narrator-1.wav");
 }
 void draw()
 {
   counter++;
+  background(colorPalette[14]);
+  ///*
   textSize(18);
   fill(color(0));
   text("FPS: " + round(frameRate), 20, 35);
   text("ET : " + nf(frameToSec(counter), 0, 2), 21, 60);
-  background(colorPalette[14]);
-
+  //*/
+  
+  ///*
   if(frameToSec(counter) < 10)
   {
     drawScene1A(10, 0);
   }
-  else if(frameToSec(counter) < 40)
+  else if(frameToSec(counter) < 24)
   {
-    drawScene1C(30, 10);
+    drawScene1B(14, 10);
   }
+  else if(frameToSec(counter) < 54)
+  {
+    drawScene1C(30, 24);
+  }
+  //*/
+  
+  //drawScene1B(14, 0);
+  //drawScene1C(30, 0);
   
   filter(ERODE);
 }
@@ -50,6 +66,14 @@ void drawScene1A(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
   drawClock(width/2, height/2);
+  if(progress == 0.1)
+  {
+    s_clock_ticking.play();
+  }
+  if(progress == 0.95)
+  {
+    s_clock_ticking.stop();
+  }
   if(progress > 0.075)
   {
     if(fadeAlpha > 1)
@@ -138,6 +162,25 @@ void drawHourLabel(float angle)
   line(0, -200, 0, -185);
   popMatrix();
 }
+void drawScene1B(float duration, float position)
+{
+  float progress = (frameToSec(counter)-position)/duration;
+  if(progress == 0)
+  {
+    s_office_ambience.amp(0.25);
+    s_office_ambience.play();
+  }
+  if(progress > 0.0999 && progress < 0.1)
+  {
+    s_narrator_1.play();
+  }
+  headRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+  torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+  handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
+  handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
+  legRot_B = sin((norm(counter, 0, 1)/15f)) * 0;
+  drawBudi(-300, -300, 2, 2,"standing");
+}
 void drawScene1C(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
@@ -210,7 +253,7 @@ void drawScene1C(float duration, float position)
   
   noStroke();
   pushMatrix();
-  translate(bgDis.x/4, 0);
+  translate(bgDis.x/3.5, 0);
   drawSun(-1850, 310);
   popMatrix();
   
@@ -238,14 +281,13 @@ void drawScene1C(float duration, float position)
   popMatrix();
 
   translate(fgDis.x * 10, fgDis.y);
-  drawBudi(125, 0, "standing");
-  
+  drawBudi(125, 0, 1, 1, "standing");
 }
-void drawBudi(float x, float y, String stance)
+void drawBudi(float x, float y, float xScale, float yScale, String stance)
 {
   pushMatrix();
   translate(x, y);
-  
+  scale(xScale, yScale);
   drawArmStraight(585, 410, 1, 0.9, handRotRight_B, colorPalette[1], colorPalette[2]);
 
   drawLegStraight(575, 465, 1.1, 1.1, -legRot_B, colorPalette[1], colorPalette[5]);
