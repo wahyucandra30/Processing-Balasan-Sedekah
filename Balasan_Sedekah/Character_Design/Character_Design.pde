@@ -1,4 +1,4 @@
-int[] colorPalette = {#2a2329, #454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce, #deeafa, #56ad7a, #e8c170, #233f71, #546c96}; 
+int[] colorPalette = {#2a2329, #454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce, #deeafa, #56ad7a, #e8c170, #233f71, #546c96, #d9ddef, #c3c5e6}; 
 float eyeWidth = 14, eyeHeight = 15;
 int[] blinkIntervals = {60, 60, 90, 120};
 int counter = 0;
@@ -15,30 +15,29 @@ void setup()
   size(1280, 720);
   smooth(8);  
   frameRate(60);
-  strokeWeight(4);
+  strokeWeight(3.5);
   hint(ENABLE_STROKE_PURE);
   strokeCap(ROUND);
 }
 void draw()
 {
   counter++;
-  background(colorPalette[8]);
+  background(colorPalette[14]);
   textSize(18);
   fill(#FFFF00);
   text("FPS: " + round(frameRate), 20, 35);
   text("ET : " + nf(frameToSec(counter), 0, 2), 21, 60);
 
-  drawScene1();
-
-  if (frameCount < 2)
+  if(frameToSec(counter) < 30)
   {
-    filter(ERODE);
+    drawScene1();
   }
+  filter(ERODE/1);
 }
 void drawScene1()
 {
   
-  if (frameToSec(counter) < 7)
+  if (frameToSec(counter) < 12)
   {
     bgDis.x++;
     headRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
@@ -49,7 +48,7 @@ void drawScene1()
     handRotLeft_Y = -15;
     handRotRight_Y = -30;
   } 
-  else if (frameToSec(counter) < 8)
+  else if (frameToSec(counter) < 13)
   {
     headRot_B = lerp(headRot_B, 0, frameToSec(counter)/100);
     torsoRot_B = lerp(torsoRot_B, 0, frameToSec(counter)/100);
@@ -78,18 +77,21 @@ void drawScene1()
   }
   drawFloor();
 
-  if (frameToSec(counter) > 7 && frameToSec(counter) < 7.5)
+  if (frameToSec(counter) > 13 && frameToSec(counter) < 13.25)
   {
     fgDis.x++;
   }
 
+  
   pushMatrix();
   translate(bgDis.x * 4, bgDis.y);
+  translate(fgDis.x * 10, fgDis.y);
   drawPlant(-100, 575, 0.8, 0.9);
-  drawYanto(-2000, 60, "sitting");
+  drawPlant(-1200, 575, 0.8, 0.9);
+  drawYanto(-3200, 60, "sitting");
   popMatrix();
 
-  //translate(fgDis.x * 10, fgDis.y);
+  translate(fgDis.x * 10, fgDis.y);
   drawBudi(100, 0, "standing");
   
 }
@@ -161,7 +163,7 @@ void drawHeadYanto(float x, float y, float xScale, float yScale, float angle)
   //Wajah
   createShape();
   beginShape();
-  strokeWeight(4);
+  strokeWeight(3.5);
   stroke(colorPalette[0]);
   fill(colorPalette[2]);
   vertex(44, -59);
@@ -176,7 +178,7 @@ void drawHeadYanto(float x, float y, float xScale, float yScale, float angle)
   //Daun telinga
   createShape();
   beginShape();
-  strokeWeight(4);
+  strokeWeight(3.5);
   stroke(colorPalette[0]);
   fill(colorPalette[2]);
   vertex(37, -80);
@@ -221,7 +223,7 @@ void drawHeadBudi(float x, float y, float xScale, float yScale, float angle)
   //Wajah
   createShape();
   beginShape();
-  strokeWeight(4);
+  strokeWeight(3.5);
   stroke(colorPalette[0]);
   fill(colorPalette[2]);
   vertex(44, -59);
@@ -236,7 +238,7 @@ void drawHeadBudi(float x, float y, float xScale, float yScale, float angle)
   //Daun telinga
   createShape();
   beginShape();
-  strokeWeight(4);
+  strokeWeight(3.5);
   stroke(colorPalette[0]);
   fill(colorPalette[2]);
   vertex(37, -80);
@@ -278,7 +280,7 @@ void drawTorsoShirt(float x, float y, float xScale, float yScale, float angle)
   //Badan
   createShape();
   beginShape();
-  strokeWeight(4);
+  strokeWeight(3.5);
   stroke(colorPalette[0]);
   fill(colorPalette[11]);
   vertex(-60, 72);
@@ -288,7 +290,7 @@ void drawTorsoShirt(float x, float y, float xScale, float yScale, float angle)
   //Dasi
   createShape();
   beginShape();
-  strokeWeight(3.5);
+  strokeWeight(3);
   fill(colorPalette[13]);
   vertex(-25, 55);
   bezierVertex(-27, 28, -28, 42, -22, -7);
@@ -319,7 +321,7 @@ void drawTorsoSuit(float x, float y, float xScale, float yScale, float angle)
   //Badan
   createShape();
   beginShape();
-  strokeWeight(4);
+  strokeWeight(3.5);
   stroke(colorPalette[0]);
   fill(colorPalette[7]);
   vertex(-60, 72);
@@ -354,7 +356,7 @@ void drawTorsoSuit(float x, float y, float xScale, float yScale, float angle)
   createShape();
   beginShape();
   stroke(colorPalette[0]);
-  strokeWeight(3);
+  strokeWeight(2.5);
   fill(colorPalette[12]);
   vertex(-30, -10);
   vertex(-10, -5);
@@ -372,7 +374,7 @@ void drawTorsoSuit(float x, float y, float xScale, float yScale, float angle)
   fill(colorPalette[9]);
   createShape();
   beginShape();
-  strokeWeight(4);
+  strokeWeight(3.5);
   vertex(-40, 70);
   vertex(-23, 70);
   vertex(-23, 53);
@@ -384,7 +386,7 @@ void drawTorsoSuit(float x, float y, float xScale, float yScale, float angle)
   //Kerah kiri
   createShape();
   beginShape();
-  strokeWeight(4);
+  strokeWeight(3.5);
   stroke(colorPalette[0]);
   fill(colorPalette[1]);
   vertex(-20, 42);
@@ -401,7 +403,7 @@ void drawArmStraight(float x, float y, float xScale, float yScale, float angle, 
   scale(xScale, yScale);
   fill(colB);
   stroke(colorPalette[0]);
-  strokeWeight(3.5);
+  strokeWeight(3);
   ellipse(0, 140, 29, 30);
 
   createShape();
@@ -424,7 +426,7 @@ void drawArmBent(float x, float y, float xScale, float yScale, float angle, int 
   scale(xScale, yScale);
   fill(colB);
   stroke(colorPalette[0]);
-  strokeWeight(3.5);
+  strokeWeight(3);
   ellipse(-40, 125, 29, 30);
 
   createShape();
@@ -447,7 +449,7 @@ void drawLegStraight(float x, float y, float xScale, float yScale, float angle, 
   rotate(radians(angle));
   createShape();
   beginShape();
-  strokeWeight(4);
+  strokeWeight(3.5);
   fill(colB);
   vertex(-15, 155);
   vertex(-15, 165);
@@ -457,7 +459,7 @@ void drawLegStraight(float x, float y, float xScale, float yScale, float angle, 
 
   createShape();
   beginShape();
-  strokeWeight(4);
+  strokeWeight(3.5);
   fill(colA);
   vertex(-27, 0);
   vertex(-27, 65);
@@ -470,7 +472,7 @@ void drawLegStraight(float x, float y, float xScale, float yScale, float angle, 
 
   createShape();
   beginShape();
-  strokeWeight(4);
+  strokeWeight(3.5);
   fill(colA);
   vertex(25, 165);
   vertex(-17, 165);
@@ -490,7 +492,7 @@ void drawLegBent(float x, float y, float xScale, float yScale, float angle, int 
 
   createShape();
   beginShape();
-  strokeWeight(4);
+  strokeWeight(3.5);
   fill(colB);
   vertex(-80, 120);
   vertex(-80, 130);
@@ -500,7 +502,7 @@ void drawLegBent(float x, float y, float xScale, float yScale, float angle, int 
 
   createShape();
   beginShape();
-  strokeWeight(4);
+  strokeWeight(3.5);
   fill(colA);
   vertex(28, 20);
   vertex(-55, 23);
@@ -513,7 +515,7 @@ void drawLegBent(float x, float y, float xScale, float yScale, float angle, int 
 
   createShape();
   beginShape();
-  strokeWeight(4);
+  strokeWeight(3.5);
   fill(colA);
   vertex(-45, 120);
   vertex(-82, 120);
@@ -529,7 +531,7 @@ void drawFloor()
   createShape();
   beginShape();
   noStroke();
-  fill(colorPalette[9]);
+  fill(colorPalette[15]);
   vertex(0, height - 90);
   vertex(width, height - 90);
   vertex(width, height);
@@ -538,7 +540,7 @@ void drawFloor()
 
   createShape();
   beginShape();
-  strokeWeight(5);
+  strokeWeight(4.5);
   stroke(colorPalette[0]);
   vertex(width/6, height - 90);
   vertex(width - width/6, height - 90);
@@ -553,34 +555,34 @@ void drawPlant(float x, float y, float xScale, float yScale)
   createShape();
   beginShape();
   fill(colorPalette[9]);
-  strokeWeight(3.75);
+  strokeWeight(3.25);
   vertex(-17, -25);
   vertex(10, -225);
-  vertex(18, -225);
-  vertex(-9, -25);
+  vertex(20, -225);
+  vertex(-7, -25);
   endShape(CLOSE);
 
-  drawLeaf(10, -155, 1.45, 1, PI/2.12, 3.2);
+  drawLeaf(10, -155, 1.45, 1, PI/2.12, 2.7);
 
   createShape();
   beginShape();
   fill(colorPalette[9]);
-  strokeWeight(4);
+  strokeWeight(3.5);
   vertex(-40, -25);
   vertex(-40, -260);
-  vertex(-32, -260);
-  vertex(-32, -25);
+  vertex(-30, -260);
+  vertex(-30, -25);
   endShape(CLOSE);
 
-  drawLeaf(-30, -190, 1.7, 1.3, PI/3, 2.75);
-  drawLeaf(-35, -235, 1.1, 1.1, 11*PI/6, 3.65);
-  drawLeaf(-42, -155, 1.8, 1.45, 5*PI/3, 2.65);
-  drawLeaf(-42, -100, 2.25, 1.8, 19.0*PI/12.0, 2.15);
-  drawLeaf(-30, -85, 1.8, 1.45, PI/3, 2.75);
+  drawLeaf(-30, -190, 1.7, 1.3, PI/3, 2.25);
+  drawLeaf(-35, -235, 1.1, 1.1, 11*PI/6, 3.15);
+  drawLeaf(-42, -155, 1.8, 1.45, 5*PI/3, 2.15);
+  drawLeaf(-42, -100, 2.25, 1.8, 19.0*PI/12.0, 1.65);
+  drawLeaf(-30, -85, 1.8, 1.45, PI/3, 2.25);
 
   createShape();
   beginShape();
-  strokeWeight(4.75);
+  strokeWeight(4.25);
   fill(colorPalette[9]);
   vertex(-75, 70);
   vertex(25, 70);
