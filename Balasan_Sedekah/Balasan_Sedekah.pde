@@ -1,12 +1,18 @@
 import processing.sound.*;
 
-SoundFile s_clock_ticking, s_office_ambience, s_narrator_1;
+SoundFile s_clock_ticking, s_office_ambience, s_ding, s_typewriter, s_office_radio;
 
 int[] colorPalette = {#2a2329,#454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce,
-                      #deeafa, #56ad7a, #eab353, #233f71, #546c96, #e9edf3, #d1d5db, #83858b}; 
+                      #deeafa, #56ad7a, #eab353, #233f71, #546c96, #e9edf3, #d1d5db, #83858b};
+                      
+PFont defaultFont, font1, font2, font3;
+String text1 = "PAK BUDI";
+String text2 = "Jabatan: Regional Manager";
+String text3 = "Motto: \"Aku cinta uang.\"";
 float eyeWidth = 14, eyeHeight = 15;
 int[] blinkIntervals = {60, 60, 90, 120};
 int counter = 0;
+int textCounter = 0;
 
 color fadeAlpha = 255;
 float secondHandAngle = 90;
@@ -29,17 +35,26 @@ void setup()
   strokeCap(ROUND);
   s_clock_ticking = new SoundFile(this, "sounds/clock-ticking.wav");
   s_office_ambience = new SoundFile(this, "sounds/office-ambience.wav");
-  s_narrator_1 = new SoundFile(this, "sounds/narrator-1.wav");
+  s_ding = new SoundFile(this, "sounds/ding.wav");
+  s_typewriter = new SoundFile(this, "sounds/typewriter-1.wav");
+  s_office_radio = new SoundFile(this, "sounds/office-radio.wav");
+  defaultFont = createFont("fonts/Lucida Sans.ttf", 48);
+  font1 = createFont("fonts/Heathergreen-XPPG.ttf", 48);
+  font2 = createFont("fonts/AgentOrange.ttf", 48);
+  font3 = createFont("fonts/WigendaTypewrite.ttf", 48);
 }
 void draw()
 {
   counter++;
   background(colorPalette[14]);
   ///*
+  
+  textFont(defaultFont);
   textSize(18);
+  textAlign(LEFT);
   fill(color(0));
-  text("FPS: " + round(frameRate), 20, 35);
-  text("ET : " + nf(frameToSec(counter), 0, 2), 21, 60);
+  text("FPS: " + round(frameRate), 20, 55);
+  text("ET : " + nf(frameToSec(counter), 0, 2), 20, 75);
   //*/
   
   ///*
@@ -60,12 +75,17 @@ void draw()
   //drawScene1B(14, 0);
   //drawScene1C(30, 0);
   
-  filter(ERODE);
+  
 }
 void drawScene1A(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
-  drawClock(width/2, height/2);
+  drawClock(width/2, height/2 + 50);
+  filter(ERODE);
+  textSize(48);
+  textFont(font1);
+  textAlign(CENTER);
+  text("PT.  SUKA  UANG", width/2, height/2 - 25);
   if(progress == 0.1)
   {
     s_clock_ticking.play();
@@ -170,20 +190,68 @@ void drawScene1B(float duration, float position)
     s_office_ambience.amp(0.25);
     s_office_ambience.play();
   }
-  if(progress > 0.0999 && progress < 0.1)
+  textSize(48);
+  textFont(font2);
+  if(progress <= 0.4)
   {
-    s_narrator_1.play();
+    headRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+    torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+    handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
+    handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
+    legRot_B = sin((norm(counter, 0, 1)/15f)) * 0;
   }
-  headRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
-  torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
-  handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
-  handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
-  legRot_B = sin((norm(counter, 0, 1)/15f)) * 0;
+  if(progress > 0.4 && progress < 0.401)
+  {
+    s_ding.play();
+  }
+  if(progress > 0.4)
+  {
+    text(text1, 150, 375);
+    //typewriteText(text1, 150, 375, 8, 0);
+  }
+  textFont(font3);
+  textSize(40);
+  if(progress > 0.5 && progress < 0.5015)
+  {
+    s_typewriter.play();
+  }
+  if(progress > 0.5)
+  {
+    typewriteText(text2, 150, 450, 4, 0);
+  }
+  if(progress > 0.65)
+  {
+    typewriteText(text3, 150, 500, 4, text2.length());
+  }
   drawBudi(-300, -300, 2, 2,"standing");
+  if(progress > 0.4)
+  {
+    //filter(GRAY);
+  }
+  filter(ERODE);
+}
+void typewriteText(String s, float x, float y, float interval, int offset)
+{ 
+  if (textCounter - offset < s.length() && counter % interval == 0)
+  {
+    textCounter++;
+  }
+  if(textCounter - offset < s.length())
+  {
+    text(s.substring(0, textCounter - offset), x, y);
+  }
+  else if (textCounter - offset >= s.length())
+  {
+    text(s, x, y);
+  }
 }
 void drawScene1C(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
+  if(progress == 0)
+  {
+    s_office_radio.play();
+  }
   if (progress < 0.467)
   {
     bgDis.x++;
@@ -282,6 +350,8 @@ void drawScene1C(float duration, float position)
 
   translate(fgDis.x * 10, fgDis.y);
   drawBudi(125, 0, 1, 1, "standing");
+  
+  filter(ERODE);
 }
 void drawBudi(float x, float y, float xScale, float yScale, String stance)
 {
