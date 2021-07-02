@@ -195,6 +195,16 @@ void drawScene1B(float duration, float position)
   textFont(font2);
   if(progress <= 0.4)
   {
+    float i = random(0, 3);
+    if (frameCount % blinkIntervals[(int) i] == 0)
+    {
+      eyeWidth = 19;
+      eyeHeight = 4;
+    } else
+    {
+      eyeWidth = 14;
+      eyeHeight = 15;
+    }
     headRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
     torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
     handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
