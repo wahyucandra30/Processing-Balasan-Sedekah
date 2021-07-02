@@ -38,6 +38,7 @@ void setup()
   s_ding = new SoundFile(this, "sounds/ding.wav");
   s_typewriter = new SoundFile(this, "sounds/typewriter-1.wav");
   s_office_radio = new SoundFile(this, "sounds/office-radio.wav");
+  s_office_radio.amp(0.5);
   defaultFont = createFont("fonts/Lucida Sans.ttf", 48);
   font1 = createFont("fonts/Heathergreen-XPPG.ttf", 48);
   font2 = createFont("fonts/AgentOrange.ttf", 48);
@@ -250,6 +251,7 @@ void drawScene1C(float duration, float position)
   float progress = (frameToSec(counter)-position)/duration;
   if(progress == 0)
   {
+    
     s_office_radio.play();
   }
   if (progress < 0.467)
@@ -321,8 +323,8 @@ void drawScene1C(float duration, float position)
   
   noStroke();
   pushMatrix();
-  translate(bgDis.x/3.5, 0);
-  drawSun(-1850, 310);
+  translate(-bgDis.x/3.5, 0);
+  drawSun(-1500, 310);
   popMatrix();
   
   fill(colorPalette[14]);
