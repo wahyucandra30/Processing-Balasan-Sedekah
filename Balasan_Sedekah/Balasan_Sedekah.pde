@@ -7,7 +7,7 @@ float fadeVolume_office_radio = 0.5;
 int[] colorPalette = {#2a2329,#454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce,
                       #deeafa, #56ad7a, #eab353, #233f71, #546c96, #e9edf3, #d1d5db, #83858b};
                       
-PFont defaultFont, font1, font2, font3;
+PFont defaultFont, font1, font2, font3, font4;
 String text1 = "PAK BUDI";
 String text2 = "Jabatan: Regional Manager";
 String text3 = "Motto: \"Aku cinta uang.\"";
@@ -19,8 +19,8 @@ int[] blinkIntervals = {60, 60, 90, 120};
 int counter = 0;
 int textCounter = 0;
 
-color fadeInAlpha = 255;
-color fadeOutAlpha = 0;
+color fadeInAlpha1 = 255, fadeInAlpha2 = 255;
+color fadeOutAlpha1 = 0, fadeOutAlpha2 = 0;
 float secondHandAngle = 90;
 
 PVector bgDis = new PVector(0, 0);
@@ -53,6 +53,7 @@ void setup()
   font1 = createFont("fonts/Heathergreen-XPPG.ttf", 48);
   font2 = createFont("fonts/AgentOrange.ttf", 48);
   font3 = createFont("fonts/WigendaTypewrite.ttf", 48);
+  font4 = createFont("fonts/SomeTimeLater.otf", 48);
 }
 void draw()
 {
@@ -96,6 +97,7 @@ void draw()
 void drawScene1A(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
+  text("PRO: " + nf(progress, 0, 3), 20, 115);
   drawClock(width/2, height/2 + 50);
   filter(ERODE);
   textSize(48);
@@ -112,22 +114,23 @@ void drawScene1A(float duration, float position)
   }
   if(progress > 0.075)
   {
-    if(fadeInAlpha > 1)
+    if(fadeInAlpha1 > 1)
     {
-      fadeInAlpha--;
+      fadeInAlpha1--;
     }
     else
     {
-      fadeInAlpha = 1;
+      fadeInAlpha1 = 1;
     }
   }
   noStroke();
-  fill(color(0, fadeInAlpha));
+  fill(color(0, fadeInAlpha1));
   rect(0, 0, width, height);
 }
 void drawScene1B(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
+  text("PRO: " + nf(progress, 0, 3), 20, 115);
   if(progress == 0)
   {
     s_office_ambience.amp(0.25);
@@ -183,6 +186,7 @@ void drawScene1B(float duration, float position)
 void drawScene1C(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
+  text("PRO: " + nf(progress, 0, 3), 20, 115);
   if(progress == 0)
   {
     textCounter = 0;
@@ -289,13 +293,13 @@ void drawScene1C(float duration, float position)
   }
   if(progress > 0.875)
   {
-    if(fadeOutAlpha < 255)
+    if(fadeOutAlpha1 < 255)
     {
-      fadeOutAlpha += 1.85;
+      fadeOutAlpha1 += 1.85;
     }
     else
     {
-      fadeOutAlpha = 255;
+      fadeOutAlpha1 = 255;
     }
   }
   pushMatrix();
@@ -348,7 +352,7 @@ void drawScene1C(float duration, float position)
   filter(ERODE);
   if(progress > 0.875)
   {
-    fill(color(0), fadeOutAlpha);
+    fill(color(0), fadeOutAlpha1);
     noStroke();
     rect(width/2, height/2, width*2, height*2);
   }
@@ -356,7 +360,12 @@ void drawScene1C(float duration, float position)
 void drawScene2A(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
-  if(progress < 0.2)
+  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  if(progress < 0.1)
+  {
+    fadeInAlpha1 = 255;
+  }
+  if(progress < 0.4)
   {
     if(fadeVolume_office_radio > 0)
     {
@@ -366,10 +375,53 @@ void drawScene2A(float duration, float position)
     {
       fadeVolume_office_radio = 0;
     }
-    
-    fill(color(0), fadeOutAlpha);
-    noStroke();
-    rect(width/2, height/2, width*2, height*2);
+  }
+  
+  fill(color(0), fadeOutAlpha1);
+  if(progress > 0.25)
+  {
+    if(fadeInAlpha1 > 1)
+    {
+      fadeInAlpha1-= 5;
+    }
+    else
+    {
+      fadeInAlpha1 = 0;
+    }
+    fill(color(0), fadeInAlpha1);
+  }
+  noStroke();
+  rect(width/2, height/2, width*2, height*2);
+  if(progress > 0.075)
+  {
+    if(progress < 0.2)
+    {
+      if(fadeOutAlpha2 < 255)
+      {
+        fadeOutAlpha2 += 5;
+      }
+      else
+      {
+        fadeOutAlpha2 = 255;
+      }
+    }
+    fill(color(255), fadeOutAlpha2);
+    if(progress > 0.25)
+    {
+      if(fadeInAlpha2 > 0)
+      {
+        fadeInAlpha2 -= 5;
+      }
+      else
+      {
+        fadeInAlpha2 = 0;
+      }
+      fill(color(255), fadeInAlpha2);
+    }
+    textSize(64);
+    textAlign(CENTER);
+    textFont(font4);
+    text("BEBERAPA WAKTU KEMUDIAN", width/2, height/2);
   }
   s_office_radio.amp(fadeVolume_office_radio);
   filter(ERODE);
