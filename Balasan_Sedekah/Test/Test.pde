@@ -1,9 +1,11 @@
 int[] colorPalette = {#2a2329,#454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce,
-                      #deeafa, #56ad7a, #eab353, #233f71, #546c96, #e9edf3, #d1d5db, #83858b}; 
+                      #deeafa, #56ad7a, #eab353, #233f71, #546c96, #e9edf3, #d1d5db, #83858b, #f8a44e,
+                      #6b3b1a, #925122};
 float eyeWidth = 14, eyeHeight = 15;
 
 //Pak Yanto
 float headRot_Y = 0, torsoRot_Y = 0, handRotLeft_Y = 0, handRotRight_Y = 0, legRot_Y = 0;
+int counter = 0;
 
 void setup()
 {
@@ -17,10 +19,37 @@ void setup()
 
 void draw()
 {
-  background(colorPalette[14]);
-  //drawYanto(0, 60, "sitting");
-  drawAC(width/2, 100);
-  drawSofa(width/2, height - height/3);
+  counter++;
+  background(colorPalette[17]);
+  
+  drawScene2A(30, 0);
+  filter(ERODE);
+}
+void drawScene2A(float duration, float position)
+{
+  float progress = (frameToSec(counter)-position)/duration;
+  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  
+  fill(color(0), 255);
+  if(progress > 0.25)
+  {
+    fill(color(0), 0);
+  }
+  rectMode(CENTER);
+  noStroke();
+  rect(width/2, height/2, width*2, height*2);
+  if(progress > 0.075)
+  {
+    fill(color(255), 255);
+    if(progress > 0.25)
+    {
+      fill(color(255), 0);
+    }
+    textSize(64);
+    textAlign(CENTER);
+    //textFont(font4);
+    text("BEBERAPA WAKTU KEMUDIAN", width/2, height/2);
+  }
   filter(ERODE);
 }
 void drawSofa(float x, float y)
@@ -460,4 +489,8 @@ void drawTorsoShirt(float x, float y, float xScale, float yScale, float angle)
   endShape(CLOSE);
 
   popMatrix();
+}
+static float frameToSec(float frame)
+{
+  return frame/60f;
 }

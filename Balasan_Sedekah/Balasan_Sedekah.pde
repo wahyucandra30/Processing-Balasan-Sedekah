@@ -5,7 +5,10 @@ SoundFile s_clock_ticking, s_office_ambience, s_ding, s_typewriter, s_office_rad
 float fadeVolume_office_radio = 0.5;
 
 int[] colorPalette = {#2a2329,#454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce,
-                      #deeafa, #56ad7a, #eab353, #233f71, #546c96, #e9edf3, #d1d5db, #83858b};
+                      #deeafa, #56ad7a, #eab353, #233f71, #546c96, #e9edf3, #d1d5db, #83858b, #f8a44e,
+                      #6b3b1a, #925122};
+
+color bgCol;
                       
 PFont defaultFont, font1, font2, font3, font4;
 String text1 = "PAK BUDI";
@@ -54,11 +57,12 @@ void setup()
   font2 = createFont("fonts/AgentOrange.ttf", 48);
   font3 = createFont("fonts/WigendaTypewrite.ttf", 48);
   font4 = createFont("fonts/SomeTimeLater.otf", 48);
+  bgCol = colorPalette[14];
 }
 void draw()
 {
   counter++;
-  background(colorPalette[14]);
+  background(bgCol);
   ///*
   
   textFont(defaultFont);
@@ -363,7 +367,9 @@ void drawScene2A(float duration, float position)
   text("PRO: " + nf(progress, 0, 3), 20, 115);
   if(progress < 0.1)
   {
+    bgCol = colorPalette[17];
     fadeInAlpha1 = 255;
+    fadeOutAlpha1 = 255;
   }
   if(progress < 0.4)
   {
