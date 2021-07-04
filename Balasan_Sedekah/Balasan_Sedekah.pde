@@ -1,6 +1,7 @@
 import processing.sound.*;
 
-SoundFile s_clock_ticking, s_office_ambience, s_ding, s_typewriter, s_office_radio;
+SoundFile s_clock_ticking, s_office_ambience, s_ding, s_typewriter, s_office_radio, s_swish,
+          s_budi_s1_1, s_budi_s1_2, s_budi_s1_3;
 
 int[] colorPalette = {#2a2329,#454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce,
                       #deeafa, #56ad7a, #eab353, #233f71, #546c96, #e9edf3, #d1d5db, #83858b};
@@ -9,12 +10,16 @@ PFont defaultFont, font1, font2, font3;
 String text1 = "PAK BUDI";
 String text2 = "Jabatan: Regional Manager";
 String text3 = "Motto: \"Aku cinta uang.\"";
-float eyeWidth = 14, eyeHeight = 15;
+String text4 = "Hei, Yanto...";
+String text5 = "Untuk menghemat pengeluaran perusahaan...";
+String text6 = "Gaji kamu bulan ini saya potong 10%";
+float eyeWidth_B = 14, eyeHeight_B = 15, eyeWidth_Y = 14, eyeHeight_Y = 15;
 int[] blinkIntervals = {60, 60, 90, 120};
 int counter = 0;
 int textCounter = 0;
 
-color fadeAlpha = 255;
+color fadeInAlpha = 255;
+color fadeOutAlpha = 0;
 float secondHandAngle = 90;
 
 PVector bgDis = new PVector(0, 0);
@@ -39,6 +44,10 @@ void setup()
   s_typewriter = new SoundFile(this, "sounds/typewriter-1.wav");
   s_office_radio = new SoundFile(this, "sounds/office-radio.wav");
   s_office_radio.amp(0.5);
+  s_swish = new SoundFile(this, "sounds/swish.wav");
+  s_budi_s1_1 = new SoundFile(this, "sounds/budi-s1-1.wav");
+  s_budi_s1_2 = new SoundFile(this, "sounds/budi-s1-2.wav");
+  s_budi_s1_3 = new SoundFile(this, "sounds/budi-s1-3.wav");
   defaultFont = createFont("fonts/Lucida Sans.ttf", 48);
   font1 = createFont("fonts/Heathergreen-XPPG.ttf", 48);
   font2 = createFont("fonts/AgentOrange.ttf", 48);
@@ -55,7 +64,8 @@ void draw()
   textAlign(LEFT);
   fill(color(0));
   text("FPS: " + round(frameRate), 20, 55);
-  text("ET : " + nf(frameToSec(counter), 0, 2), 20, 75);
+  text("ET: " + nf(frameToSec(counter), 0, 2), 20, 75);
+  text("TC: " + textCounter, 20, 95);
   //*/
   
   ///*
@@ -97,18 +107,243 @@ void drawScene1A(float duration, float position)
   }
   if(progress > 0.075)
   {
-    if(fadeAlpha > 1)
+    if(fadeInAlpha > 1)
     {
-      fadeAlpha--;
+      fadeInAlpha--;
     }
     else
     {
-      fadeAlpha = 1;
+      fadeInAlpha = 1;
     }
   }
   noStroke();
-  fill(color(0, fadeAlpha));
+  fill(color(0, fadeInAlpha));
   rect(0, 0, width, height);
+}
+void drawScene1B(float duration, float position)
+{
+  float progress = (frameToSec(counter)-position)/duration;
+  if(progress == 0)
+  {
+    s_office_ambience.amp(0.25);
+    s_office_ambience.play();
+  }
+  textSize(48);
+  textFont(font2);
+  if(progress <= 0.4)
+  {
+    float i = random(0, 3);
+    if (frameCount % blinkIntervals[(int) i] == 0)
+    {
+      eyeWidth_B = 19;
+      eyeHeight_B = 4;
+    } else
+    {
+      eyeWidth_B = 14;
+      eyeHeight_B = 15;
+    }
+    headRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+    torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+    handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
+    handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
+    legRot_B = sin((norm(counter, 0, 1)/15f)) * 0;
+  }
+  if(progress > 0.4 && progress < 0.401)
+  {
+    s_ding.play();
+  }
+  if(progress > 0.4)
+  {
+    text(text1, 150, 375);
+    //typewriteText(text1, 150, 375, 8, 0);
+  }
+  textFont(font3);
+  textSize(40);
+  if(progress > 0.5 && progress < 0.5015)
+  {
+    s_typewriter.play();
+  }
+  if(progress > 0.5)
+  {
+    typewriteText(text2, 150, 450, 4, 0);
+  }
+  if(progress > 0.65)
+  {
+    typewriteText(text3, 150, 500, 4, text2.length());
+  }
+  drawBudi(-300, -300, 2, 2,"standing");
+  
+  filter(ERODE);
+}
+void drawScene1C(float duration, float position)
+{
+  float progress = (frameToSec(counter)-position)/duration;
+  if(progress == 0)
+  {
+    textCounter = 0;
+    s_office_radio.play();
+  }
+  if (progress < 0.467)
+  {
+    bgDis.x++;
+    headRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
+    torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
+    handRotLeft_B = -sin((norm(counter, 0, 1)/15f)) * 30;
+    handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 30;
+    legRot_B = sin((norm(counter, 0, 1)/15f)) * 10;
+    handRotLeft_Y = -15;
+    handRotRight_Y = -30;
+  } 
+  else if (progress < 0.5)
+  {
+    headRot_B = lerp(headRot_B, 0, frameToSec(counter)/100);
+    torsoRot_B = lerp(torsoRot_B, 0, frameToSec(counter)/100);
+    handRotLeft_B = lerp(handRotLeft_B, 0, frameToSec(counter)/100);
+    handRotRight_B = -lerp(handRotLeft_B, 0, frameToSec(counter)/100);
+    legRot_B = lerp(legRot_B, 0, frameToSec(counter)/100);
+  } 
+  else
+  {
+    headRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
+    torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
+    handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 2;
+    handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 2;
+    legRot_B = sin((norm(counter, 0, 1)/15f)) * 0;
+  }
+  if(progress > 0.5 && progress < 0.5417)
+  {
+    headRot_Y = lerp(headRot_Y, 10, frameToSec(counter)/400);
+  }
+  if (progress > 0.85 && progress < 0.89167)
+  {
+    mouthVerts_Y[1] += 0.1;
+    mouthVerts_Y[3] -= 0.1;
+    mouthVerts_Y[5] -= 0.1;
+    mouthVerts_Y[7] += 0.1;
+    headRot_Y = lerp(headRot_Y, -10, frameToSec(counter)/500);
+  }
+
+  float i = random(0, 3);
+  float j = random(0, 3);
+  if (frameCount % blinkIntervals[(int) i] == 0)
+  {
+    eyeWidth_B = 19;
+    eyeHeight_B = 4;
+  } else
+  {
+    eyeWidth_B = 14;
+    eyeHeight_B = 15;
+  }
+  if (frameCount % blinkIntervals[(int) j] == 0)
+  {
+    eyeWidth_Y = 19;
+    eyeHeight_Y = 4;
+  } else
+  {
+    eyeWidth_Y = 14;
+    eyeHeight_Y = 15;
+  }
+  drawWall();
+  
+  drawFloor();
+
+  if(progress > 0.5 && progress < 0.501)
+  {
+    s_swish.play();
+  }
+  if (progress > 0.5 && progress < 0.5125)
+  {
+    fgDis.x++;
+  }
+  textFont(font3);
+  textSize(24);
+  fill(color(0));
+  if(progress > 0.55 && progress < 0.551)
+  {
+    s_budi_s1_1.play();
+  }
+  if(progress > 0.55 && progress < 0.62)
+  {
+    typewriteText(text4, 700, 250, 3, 0);
+  }
+  if(progress > 0.62 && progress < 0.621)
+  {
+    s_budi_s1_2.play();
+  }
+  if(progress > 0.62 && progress < 0.75)
+  {
+    typewriteText(text5, 600, 250, 3, text4.length());
+  }
+  if(progress > 0.75 && progress < 0.751)
+  {
+    s_budi_s1_3.play();
+  }
+  if(progress > 0.75 && progress < 0.875)
+  {
+    typewriteText(text6, 600, 250, 3, text4.length() + text5.length());
+  }
+  if(progress > 0.875)
+  {
+    if(fadeOutAlpha < 255)
+    {
+      fadeOutAlpha += 1.85;
+    }
+    else
+    {
+      fadeOutAlpha = 255;
+    }
+  }
+  pushMatrix();
+  translate(bgDis.x * 4, bgDis.y);
+  translate(fgDis.x * 10, fgDis.y);
+  fill(colorPalette[9]);
+  
+  rect(-1500, 350, 250, 200);//Window R
+  rect(-1780, 350, 250, 200);//Window L
+  
+  noStroke();
+  pushMatrix();
+  translate(-bgDis.x/3.5, 0);
+  drawSun(-1500, 310);
+  popMatrix();
+  
+  fill(colorPalette[14]);
+  stroke(colorPalette[16]);
+  //Separator
+  rect(-1640, 350, 28, 200);
+  noStroke();
+  rect(-1640, 200, 24, 200);
+  rect(-1640, 370, 24, 200);
+  
+  drawVent(-950, 575);
+  drawAC(-1100, 100);
+  drawBBoard(120, 350, 400, 250);
+  drawDoor(500, 405, 270, 450);
+  drawDoubleDoor(-500, 405, 270, 450);
+  
+  drawPlant(-100, 575, 0.8, 0.9);
+  drawPlant(-1200, 575, 0.8, 0.9);
+  
+  drawChair(-3200, 600);
+  drawYanto(-3800, 60, "sitting");
+  //drawTable(-3150, 560);
+  drawTable(-2900, 550);
+  popMatrix();
+
+  translate(fgDis.x * 10, fgDis.y);
+  drawBudi(125, 0, 1, 1, "standing");
+  
+  filter(ERODE);
+  if(progress > 0.875)
+  {
+    fill(color(0), fadeOutAlpha);
+    noStroke();
+    rect(width/2, height/2, width*2, height*2);
+  }
+}
+void drawScene2A(float duration, float position)
+{
+  float progress = (frameToSec(counter)-position)/duration;
 }
 void drawClock(float x, float y)
 {
@@ -183,64 +418,7 @@ void drawHourLabel(float angle)
   line(0, -200, 0, -185);
   popMatrix();
 }
-void drawScene1B(float duration, float position)
-{
-  float progress = (frameToSec(counter)-position)/duration;
-  if(progress == 0)
-  {
-    s_office_ambience.amp(0.25);
-    s_office_ambience.play();
-  }
-  textSize(48);
-  textFont(font2);
-  if(progress <= 0.4)
-  {
-    float i = random(0, 3);
-    if (frameCount % blinkIntervals[(int) i] == 0)
-    {
-      eyeWidth = 19;
-      eyeHeight = 4;
-    } else
-    {
-      eyeWidth = 14;
-      eyeHeight = 15;
-    }
-    headRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
-    torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
-    handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
-    handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
-    legRot_B = sin((norm(counter, 0, 1)/15f)) * 0;
-  }
-  if(progress > 0.4 && progress < 0.401)
-  {
-    s_ding.play();
-  }
-  if(progress > 0.4)
-  {
-    text(text1, 150, 375);
-    //typewriteText(text1, 150, 375, 8, 0);
-  }
-  textFont(font3);
-  textSize(40);
-  if(progress > 0.5 && progress < 0.5015)
-  {
-    s_typewriter.play();
-  }
-  if(progress > 0.5)
-  {
-    typewriteText(text2, 150, 450, 4, 0);
-  }
-  if(progress > 0.65)
-  {
-    typewriteText(text3, 150, 500, 4, text2.length());
-  }
-  drawBudi(-300, -300, 2, 2,"standing");
-  if(progress > 0.4)
-  {
-    //filter(GRAY);
-  }
-  filter(ERODE);
-}
+
 void typewriteText(String s, float x, float y, float interval, int offset)
 { 
   if (textCounter - offset < s.length() && counter % interval == 0)
@@ -256,115 +434,7 @@ void typewriteText(String s, float x, float y, float interval, int offset)
     text(s, x, y);
   }
 }
-void drawScene1C(float duration, float position)
-{
-  float progress = (frameToSec(counter)-position)/duration;
-  if(progress == 0)
-  {
-    
-    s_office_radio.play();
-  }
-  if (progress < 0.467)
-  {
-    bgDis.x++;
-    headRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
-    torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
-    handRotLeft_B = -sin((norm(counter, 0, 1)/15f)) * 30;
-    handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 30;
-    legRot_B = sin((norm(counter, 0, 1)/15f)) * 10;
-    handRotLeft_Y = -15;
-    handRotRight_Y = -30;
-  } 
-  else if (progress < 0.5)
-  {
-    headRot_B = lerp(headRot_B, 0, frameToSec(counter)/100);
-    torsoRot_B = lerp(torsoRot_B, 0, frameToSec(counter)/100);
-    handRotLeft_B = lerp(handRotLeft_B, 0, frameToSec(counter)/100);
-    handRotRight_B = -lerp(handRotLeft_B, 0, frameToSec(counter)/100);
-    legRot_B = lerp(legRot_B, 0, frameToSec(counter)/100);
-  } 
-  else
-  {
-    headRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
-    torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
-    handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 2;
-    handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 2;
-    legRot_B = sin((norm(counter, 0, 1)/15f)) * 0;
-  }
-  if(progress > 0.5 && progress < 0.5417)
-  {
-    headRot_Y = lerp(headRot_Y, 10, frameToSec(counter)/400);
-  }
-  if (progress > 0.65 && progress < 0.69167)
-  {
-    mouthVerts_Y[1] += 0.1;
-    mouthVerts_Y[3] -= 0.1;
-    mouthVerts_Y[5] -= 0.1;
-    mouthVerts_Y[7] += 0.1;
-    headRot_Y = lerp(headRot_Y, -10, frameToSec(counter)/500);
-  }
 
-  float i = random(0, 3);
-  if (frameCount % blinkIntervals[(int) i] == 0)
-  {
-    eyeWidth = 19;
-    eyeHeight = 4;
-  } else
-  {
-    eyeWidth = 14;
-    eyeHeight = 15;
-  }
-  drawWall();
-  
-  drawFloor();
-
-  if (progress > 0.5 && progress < 0.5125)
-  {
-    fgDis.x++;
-  }
-
-  pushMatrix();
-  translate(bgDis.x * 4, bgDis.y);
-  translate(fgDis.x * 10, fgDis.y);
-  fill(colorPalette[9]);
-  
-  rect(-1500, 350, 250, 200);//Window R
-  rect(-1780, 350, 250, 200);//Window L
-  
-  noStroke();
-  pushMatrix();
-  translate(-bgDis.x/3.5, 0);
-  drawSun(-1500, 310);
-  popMatrix();
-  
-  fill(colorPalette[14]);
-  stroke(colorPalette[16]);
-  //Separator
-  rect(-1640, 350, 28, 200);
-  noStroke();
-  rect(-1640, 200, 24, 200);
-  rect(-1640, 370, 24, 200);
-  
-  drawVent(-950, 575);
-  drawAC(-1100, 100);
-  drawBBoard(120, 350, 400, 250);
-  drawDoor(500, 405, 270, 450);
-  drawDoubleDoor(-500, 405, 270, 450);
-  
-  drawPlant(-100, 575, 0.8, 0.9);
-  drawPlant(-1200, 575, 0.8, 0.9);
-  
-  drawChair(-3200, 600);
-  drawYanto(-3800, 60, "sitting");
-  //drawTable(-3150, 560);
-  drawTable(-2900, 550);
-  popMatrix();
-
-  translate(fgDis.x * 10, fgDis.y);
-  drawBudi(125, 0, 1, 1, "standing");
-  
-  filter(ERODE);
-}
 void drawBudi(float x, float y, float xScale, float yScale, String stance)
 {
   pushMatrix();
@@ -491,8 +561,8 @@ void drawHeadYanto(float x, float y, float xScale, float yScale, float angle)
   
   popMatrix();
 
-  drawCustomEllipse(-40, -81, eyeWidth, eyeHeight, colorPalette[1]);//Mata kiri
-  drawCustomEllipse(-10, -81, eyeWidth, eyeHeight, colorPalette[1]);//Mata kanan
+  drawCustomEllipse(-40, -81, eyeWidth_Y, eyeHeight_Y, colorPalette[1]);//Mata kiri
+  drawCustomEllipse(-10, -81, eyeWidth_Y, eyeHeight_Y, colorPalette[1]);//Mata kanan
 
   popMatrix();
 }
@@ -551,8 +621,8 @@ void drawHeadBudi(float x, float y, float xScale, float yScale, float angle)
   strokeWeight(15);
   bezier(-36, -56, -43, -65, -6, -65, -14, -57);
 
-  drawCustomEllipse(-40, -81, eyeWidth, eyeHeight, colorPalette[1]);//Mata kiri
-  drawCustomEllipse(-10, -81, eyeWidth, eyeHeight, colorPalette[1]);//Mata kanan
+  drawCustomEllipse(-40, -81, eyeWidth_B, eyeHeight_B, colorPalette[1]);//Mata kiri
+  drawCustomEllipse(-10, -81, eyeWidth_B, eyeHeight_B, colorPalette[1]);//Mata kanan
 
   popMatrix();
 }
