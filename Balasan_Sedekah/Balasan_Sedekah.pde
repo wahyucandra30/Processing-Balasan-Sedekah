@@ -1065,23 +1065,23 @@ void drawSofa(float x, float y)
   pushMatrix();
   translate(x, y);
   
-  stroke(colorPalette[16]);
+  stroke(colorPalette[0]);
   
   //Back Foot L
-  fill(colorPalette[15]);
-  rect(-65, 65, 22, 40);
+  fill(colorPalette[8]);
+  rect(-60, 65, 22, 50);
   //Front Foot L
-  fill(colorPalette[14]);
-  rect(35, 65, 22, 40);
+  fill(colorPalette[4]);
+  rect(40, 65, 22, 50);
   //Back Foot R
-  fill(colorPalette[15]);
-  rect(215, 65, 22, 40);
+  fill(colorPalette[8]);
+  rect(220, 65, 22, 50);
   //Front Foot R
-  fill(colorPalette[14]);
-  rect(315, 65, 22, 40);
+  fill(colorPalette[4]);
+  rect(320, 65, 22, 50);
   
   //Front R
-  fill(colorPalette[14]);
+  fill(colorPalette[4]);
   createShape();
   beginShape();
   vertex(-15, -15);
@@ -1092,7 +1092,7 @@ void drawSofa(float x, float y)
   endShape(CLOSE);
   
   //Side R
-  fill(colorPalette[15]);
+  fill(colorPalette[8]);
   createShape();
   beginShape();
   vertex(-15, -15);
@@ -1103,7 +1103,7 @@ void drawSofa(float x, float y)
   endShape(CLOSE);
   
   //Top Cushion
-  fill(colorPalette[14]);
+  fill(colorPalette[4]);
   createShape();
   beginShape();
   vertex(-60, -95);
@@ -1114,7 +1114,7 @@ void drawSofa(float x, float y)
   endShape(CLOSE);
   
   //Bottom Cushion
-  fill(colorPalette[14]);
+  fill(colorPalette[4]);
   createShape();
   beginShape();
   vertex(-60, 25);
@@ -1125,7 +1125,7 @@ void drawSofa(float x, float y)
   endShape(CLOSE);
   
   //Front L
-  fill(colorPalette[14]);
+  fill(colorPalette[4]);
   createShape();
   beginShape();
   vertex(-15, -15);
@@ -1136,7 +1136,7 @@ void drawSofa(float x, float y)
   endShape(CLOSE);
 
   //Side L
-  fill(colorPalette[15]);
+  fill(colorPalette[8]);
   createShape();
   beginShape();
   vertex(-75, 75);
