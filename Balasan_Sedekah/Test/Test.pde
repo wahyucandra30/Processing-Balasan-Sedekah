@@ -18,11 +18,99 @@ void setup()
 void draw()
 {
   background(colorPalette[14]);
-  drawChair(400, 550);
-  drawYanto(0, 60, "sitting");
+  //drawYanto(0, 60, "sitting");
   drawAC(width/2, 100);
-  drawTable(800, 550);
+  drawSofa(width/2, height - height/3);
   filter(ERODE);
+}
+void drawSofa(float x, float y)
+{
+  pushMatrix();
+  translate(x, y);
+  
+  stroke(colorPalette[0]);
+  
+  //Back Foot L
+  fill(colorPalette[15]);
+  rect(-65, 65, 22, 40);
+  //Front Foot L
+  fill(colorPalette[14]);
+  rect(35, 65, 22, 40);
+  //Back Foot R
+  fill(colorPalette[15]);
+  rect(215, 65, 22, 40);
+  //Front Foot R
+  fill(colorPalette[14]);
+  rect(315, 65, 22, 40);
+  
+  //Front R
+  fill(colorPalette[14]);
+  createShape();
+  beginShape();
+  vertex(-15, -15);
+  vertex(320, -15);
+  bezierVertex(330, -15, 340, -10, 340, 10);
+  vertex(340, 75);
+  vertex(-65, 75);
+  endShape(CLOSE);
+  
+  //Side R
+  fill(colorPalette[15]);
+  createShape();
+  beginShape();
+  vertex(-15, -15);
+  vertex(290, -15);
+  bezierVertex(300, -15, 310, -10, 310, 10);
+  vertex(310, 75);
+  vertex(-65, 75);
+  endShape(CLOSE);
+  
+  //Top Cushion
+  fill(colorPalette[14]);
+  createShape();
+  beginShape();
+  vertex(-60, -95);
+  vertex(230, -95);
+  bezierVertex(240, -95, 250, -90, 250, -75);
+  vertex(250, 75);
+  vertex(-65, 75);
+  endShape(CLOSE);
+  
+  //Bottom Cushion
+  fill(colorPalette[14]);
+  createShape();
+  beginShape();
+  vertex(-60, 25);
+  vertex(290, 25);
+  bezierVertex(300, 25, 310, 30, 310, 45);
+  vertex(310, 75);
+  vertex(-65, 75);
+  endShape(CLOSE);
+  
+  //Front L
+  fill(colorPalette[14]);
+  createShape();
+  beginShape();
+  vertex(-15, -15);
+  vertex(40, -15);
+  bezierVertex(50, -15, 60, -10, 60, 10);
+  vertex(60, 75);
+  vertex(-65, 75);
+  endShape(CLOSE);
+
+  //Side L
+  fill(colorPalette[15]);
+  createShape();
+  beginShape();
+  vertex(-75, 75);
+  vertex(-75, -80);
+  bezierVertex(-75, -90, -65, -95, -60, -95);
+  bezierVertex(-50, -95, -35, -95, -35, -15);
+  vertex(10, -15);
+  bezierVertex(20, -15, 30, -10, 30, 10);
+  vertex(30, 75);
+  endShape(CLOSE);
+  popMatrix();
 }
 void drawChair(float x, float y)
 {
@@ -44,56 +132,7 @@ void drawChair(float x, float y)
   rect(0, 0, 150, 20, 4*PI); //Cushion
   popMatrix();
 }
-void drawTable(float x, float y)
-{
-  pushMatrix();
-  translate(x, y);
-  stroke(colorPalette[0]);
-  
-  fill(colorPalette[0]);
-  noStroke();
-  //Leg - Back Left
-  createShape();
-  beginShape();
-  vertex(-25, 2);
-  vertex(-40, 126);
-  vertex(-27.5, 126);
-  vertex(-13.5, 2);
-  endShape();
-  
-  //Leg - Front Right
-  createShape();
-  beginShape();
-  vertex(220, 2);
-  vertex(205, 126);
-  vertex(217.5, 126);
-  vertex(231.5, 2);
-  endShape();
-  
-  fill(colorPalette[6]);
-  stroke(colorPalette[0]);
-  //Leg - Front Left
-  createShape();
-  beginShape();
-  vertex(18, 6);
-  vertex(35, 130);
-  vertex(47.5, 130);
-  vertex(29.5, 6);
-  endShape();
-  
-  //Leg - Front Right
-  createShape();
-  beginShape();
-  vertex(268, 6);
-  vertex(285, 130);
-  vertex(297.5, 130);
-  vertex(279.5, 6);
-  endShape();
-  
-  rect(-50, 0, 360, 12);//Tabletop
-  
-  popMatrix();
-}
+
 void drawYanto(float x, float y, String stance)
 {
   pushMatrix();

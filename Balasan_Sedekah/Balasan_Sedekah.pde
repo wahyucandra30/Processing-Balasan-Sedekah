@@ -2,6 +2,7 @@ import processing.sound.*;
 
 SoundFile s_clock_ticking, s_office_ambience, s_ding, s_typewriter, s_office_radio, s_swish,
           s_budi_s1_1, s_budi_s1_2, s_budi_s1_3;
+float fadeVolume_office_radio = 0.5;
 
 int[] colorPalette = {#2a2329,#454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce,
                       #deeafa, #56ad7a, #eab353, #233f71, #546c96, #e9edf3, #d1d5db, #83858b};
@@ -12,7 +13,7 @@ String text2 = "Jabatan: Regional Manager";
 String text3 = "Motto: \"Aku cinta uang.\"";
 String text4 = "Hei, Yanto...";
 String text5 = "Untuk menghemat pengeluaran perusahaan...";
-String text6 = "Gaji kamu bulan ini saya potong 10%";
+String text6 = "Gaji kamu bulan ini saya potong 10 persen.";
 float eyeWidth_B = 14, eyeHeight_B = 15, eyeWidth_Y = 14, eyeHeight_Y = 15;
 int[] blinkIntervals = {60, 60, 90, 120};
 int counter = 0;
@@ -43,7 +44,7 @@ void setup()
   s_ding = new SoundFile(this, "sounds/ding.wav");
   s_typewriter = new SoundFile(this, "sounds/typewriter-1.wav");
   s_office_radio = new SoundFile(this, "sounds/office-radio.wav");
-  s_office_radio.amp(0.5);
+  s_office_radio.amp(fadeVolume_office_radio);
   s_swish = new SoundFile(this, "sounds/swish.wav");
   s_budi_s1_1 = new SoundFile(this, "sounds/budi-s1-1.wav");
   s_budi_s1_2 = new SoundFile(this, "sounds/budi-s1-2.wav");
@@ -80,6 +81,10 @@ void draw()
   else if(frameToSec(counter) < 54)
   {
     drawScene1C(30, 24);
+  }
+  else if(frameToSec(counter) < 84)
+  {
+    drawScene2A(30, 54);
   }
   //*/
   
@@ -315,6 +320,13 @@ void drawScene1C(float duration, float position)
   rect(-1640, 200, 24, 200);
   rect(-1640, 370, 24, 200);
   
+  drawDoor(-3470, 405, 270, 450);
+  drawDoorLabel(-3470, 125, 125, 50);
+  
+  drawPlant(-2000, 575, 0.8, 0.9);
+  
+  drawSofa(-1750, 565);
+  
   drawVent(-950, 575);
   drawAC(-1100, 100);
   drawBBoard(120, 350, 400, 250);
@@ -344,6 +356,23 @@ void drawScene1C(float duration, float position)
 void drawScene2A(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
+  if(progress < 0.2)
+  {
+    if(fadeVolume_office_radio > 0)
+    {
+      fadeVolume_office_radio-=0.025;
+    }
+    else
+    {
+      fadeVolume_office_radio = 0;
+    }
+    
+    fill(color(0), fadeOutAlpha);
+    noStroke();
+    rect(width/2, height/2, width*2, height*2);
+  }
+  s_office_radio.amp(fadeVolume_office_radio);
+  filter(ERODE);
 }
 void drawClock(float x, float y)
 {
@@ -508,7 +537,7 @@ void drawHeadYanto(float x, float y, float xScale, float yScale, float angle)
   fill(colorPalette[2]);
   vertex(44, -59);
   bezierVertex(27, -33, -37, -23, -55, -61);
-  bezierVertex(-59, -83, -59, -94, -55, -116);
+  bezierVertex(-59, -83, -59, -94, -55.75, -116);
   vertex(-16, -120);
   bezierVertex(35, -137, 5, -84, 29, -86);
   bezierVertex(42, -108, 74, -99, 65, -75);
@@ -589,7 +618,7 @@ void drawHeadBudi(float x, float y, float xScale, float yScale, float angle)
   fill(colorPalette[2]);
   vertex(44, -59);
   bezierVertex(27, -33, -37, -23, -55, -61);
-  bezierVertex(-59, -83, -59, -94, -55, -116);
+  bezierVertex(-59, -83, -59, -94, -54.25, -116);
   bezierVertex(-27, -128, -52, -100, -16, -112);
   bezierVertex(35, -137, 5, -84, 29, -86);
   bezierVertex(42, -108, 74, -99, 65, -75);
@@ -915,6 +944,18 @@ void drawSun(float x, float y)
   circle(0, 0, 50);
   popMatrix();
 }
+void drawDoorLabel(float x, float y, float w, float h)
+{
+  pushMatrix();
+  translate(x, y);
+  stroke(colorPalette[16]);
+  strokeWeight(4);
+  fill(colorPalette[14]);
+  rect(0, 0, w, h); //Base
+  fill(colorPalette[15]);
+  rect(w/2.2, 0, w/9.2, h); //Side
+  popMatrix();
+}
 void drawDoor(float x, float y, float w, float h)
 {
   pushMatrix();
@@ -1017,6 +1058,95 @@ void drawAC(float x, float y)
   //Vent
   line(-130, 10, 99, 10);
   line(-135, 18, 97, 18);
+  popMatrix();
+}
+void drawSofa(float x, float y)
+{
+  pushMatrix();
+  translate(x, y);
+  
+  stroke(colorPalette[16]);
+  
+  //Back Foot L
+  fill(colorPalette[15]);
+  rect(-65, 65, 22, 40);
+  //Front Foot L
+  fill(colorPalette[14]);
+  rect(35, 65, 22, 40);
+  //Back Foot R
+  fill(colorPalette[15]);
+  rect(215, 65, 22, 40);
+  //Front Foot R
+  fill(colorPalette[14]);
+  rect(315, 65, 22, 40);
+  
+  //Front R
+  fill(colorPalette[14]);
+  createShape();
+  beginShape();
+  vertex(-15, -15);
+  vertex(320, -15);
+  bezierVertex(330, -15, 340, -10, 340, 10);
+  vertex(340, 75);
+  vertex(-65, 75);
+  endShape(CLOSE);
+  
+  //Side R
+  fill(colorPalette[15]);
+  createShape();
+  beginShape();
+  vertex(-15, -15);
+  vertex(290, -15);
+  bezierVertex(300, -15, 310, -10, 310, 10);
+  vertex(310, 75);
+  vertex(-65, 75);
+  endShape(CLOSE);
+  
+  //Top Cushion
+  fill(colorPalette[14]);
+  createShape();
+  beginShape();
+  vertex(-60, -95);
+  vertex(230, -95);
+  bezierVertex(240, -95, 250, -90, 250, -75);
+  vertex(250, 75);
+  vertex(-65, 75);
+  endShape(CLOSE);
+  
+  //Bottom Cushion
+  fill(colorPalette[14]);
+  createShape();
+  beginShape();
+  vertex(-60, 25);
+  vertex(290, 25);
+  bezierVertex(300, 25, 310, 30, 310, 45);
+  vertex(310, 75);
+  vertex(-65, 75);
+  endShape(CLOSE);
+  
+  //Front L
+  fill(colorPalette[14]);
+  createShape();
+  beginShape();
+  vertex(-15, -15);
+  vertex(40, -15);
+  bezierVertex(50, -15, 60, -10, 60, 10);
+  vertex(60, 75);
+  vertex(-65, 75);
+  endShape(CLOSE);
+
+  //Side L
+  fill(colorPalette[15]);
+  createShape();
+  beginShape();
+  vertex(-75, 75);
+  vertex(-75, -80);
+  bezierVertex(-75, -90, -65, -95, -60, -95);
+  bezierVertex(-50, -95, -35, -95, -35, -15);
+  vertex(10, -15);
+  bezierVertex(20, -15, 30, -10, 30, 10);
+  vertex(30, 75);
+  endShape(CLOSE);
   popMatrix();
 }
 void drawFloor()
