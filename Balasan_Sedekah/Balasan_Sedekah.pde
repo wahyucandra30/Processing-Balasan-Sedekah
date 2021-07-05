@@ -19,7 +19,7 @@ String text5 = "Untuk menghemat pengeluaran perusahaan...";
 String text6 = "Gaji kamu bulan ini saya potong 10 persen";
 float eyeWidth_B = 14, eyeHeight_B = 15, eyeWidth_Y = 14, eyeHeight_Y = 15;
 int[] blinkIntervals = {60, 60, 90, 120};
-int counter = 4000;
+int counter = 0;
 int textCounter = 0;
 
 color fadeInAlpha1 = 255, fadeInAlpha2 = 255;
@@ -465,14 +465,32 @@ void drawScene2A(float duration, float position)
     rect(2750, 300, 150, 900);
     noStroke();
     fill(colorPalette[15]);
-    rect(2685, 300, 20, 900); //Shadow
+    rect(2695, 300, 20, 900);
     stroke(colorPalette[0]);
     strokeWeight(6);
-    drawBrickWall(800, 650, 700, 250, 70);
+    
+    //drawHouseDoor(1250, 500, 350, 600);
+    rect(1250, 400, 1600, 900);
+    //Foliage
+    fill(colorPalette[10]);
+    stroke(colorPalette[0]);
+    ellipse(210, 600, 300, 300);
+    ellipse(500, 550, 300, 300);
+    ellipse(800, 575, 300, 300);
+    ellipse(1700, 550, 300, 300);
+    ellipse(1930, 550, 150, 150);
+    ellipse(2140, 600, 300, 300);
+    ellipse(2400, 575, 250, 250);
+    
+    rect(1250, 700, 400, 100);
+    
+    drawBrickWall(500, 650, 1200, 250, 70);
     drawBrickWall(2000, 650, 1200, 250, 70);
+    
     
     popMatrix();
     drawBudi(1500, -400, -2, 2,"standing");
+    drawSilhouette(600, -400, 2, -2, "standing");
   }
   
   s_office_radio.amp(fadeVolume_office_radio);
@@ -482,6 +500,7 @@ void drawBrickWall(float x, float y, float w, float h, float d)
 {
   pushMatrix();
   translate(x, y);
+  stroke(colorPalette[0]);
   strokeWeight(6);
   fill(colorPalette[14]);
   rect(0, 0, w-d, h);//Front
@@ -609,7 +628,27 @@ void typewriteText(String s, float x, float y, float interval, int offset)
     text(s, x, y);
   }
 }
+void drawSilhouette(float x, float y, float xScale, float yScale, String stance)
+{
+  pushMatrix();
+  translate(x, y);
+  scale(xScale, yScale);
+  drawArmStraight(585, 410, 1, 0.9, handRotRight_B, colorPalette[0], colorPalette[0]);
 
+  drawLegStraight(575, 465, 1.1, 1.1, -legRot_B, colorPalette[0], colorPalette[0]);
+  drawLegStraight(620, 466, 1.1, 1.1, legRot_B, colorPalette[0], colorPalette[0]);
+  
+  drawTorsoSilhouette(590, 415, 1, 1, torsoRot_B);
+
+  drawHeadSilhouette(586, 428, 1, 1, -headRot_B);
+
+  if (stance.toLowerCase().equals("standing"))
+  {
+    drawArmStraight(620, 395, 1.2, 1.1, handRotLeft_B, colorPalette[7], colorPalette[2]);
+  }
+  
+  popMatrix();
+}
 void drawBudi(float x, float y, float xScale, float yScale, String stance)
 {
   pushMatrix();
@@ -745,6 +784,32 @@ void drawHeadYanto(float x, float y, float xScale, float yScale, float angle)
 
   popMatrix();
 }
+void drawHeadSilhouette(float x, float y, float xScale, float yScale, float angle)
+{
+  pushMatrix();
+  translate(x, y);
+  rotate(radians(angle));
+  scale(xScale, yScale);
+  //Rambut
+  fill(colorPalette[0]);
+  ellipse(2, -105, 115, 105);
+
+  //Wajah
+  createShape();
+  beginShape();
+  strokeWeight(3.5);
+  stroke(colorPalette[0]);
+  fill(colorPalette[2]);
+  vertex(44, -59);
+  bezierVertex(27, -33, -37, -23, -55, -61);
+  bezierVertex(-59, -83, -59, -94, -54.25, -116);
+  bezierVertex(-27, -128, -52, -100, -16, -112);
+  bezierVertex(35, -137, 5, -84, 29, -86);
+  bezierVertex(42, -108, 74, -99, 65, -75);
+  bezierVertex(63, -64, 55, -53, 36, -64);
+  endShape();
+  popMatrix();
+}
 void drawHeadBudi(float x, float y, float xScale, float yScale, float angle)
 {
   pushMatrix();
@@ -850,6 +915,24 @@ void drawTorsoShirt(float x, float y, float xScale, float yScale, float angle)
   vertex(-20, -20);
   endShape(CLOSE);
 
+  popMatrix();
+}
+void drawTorsoSilhouette(float x, float y, float xScale, float yScale, float angle)
+{
+  pushMatrix();
+  translate(x, y);
+  rotate(radians(angle));
+  scale(xScale, yScale);
+  
+  //Badan
+  createShape();
+  beginShape();
+  strokeWeight(3.5);
+  stroke(colorPalette[0]);
+  fill(colorPalette[0]);
+  vertex(-60, 72);
+  bezierVertex(-80, -68, 107, -53, 70, 72);
+  endShape(CLOSE);
   popMatrix();
 }
 void drawTorsoSuit(float x, float y, float xScale, float yScale, float angle)
@@ -1104,6 +1187,21 @@ void drawDoorLabel(float x, float y, float w, float h)
   rect(0, 0, w, h); //Base
   fill(colorPalette[15]);
   rect(w/2.2, 0, w/9.2, h); //Side
+  popMatrix();
+}
+void drawHouseDoor(float x, float y, float w, float h)
+{
+  pushMatrix();
+  translate(x, y);
+  stroke(colorPalette[0]);
+  strokeWeight(6);
+  fill(colorPalette[14]);
+  rect(0, 0, w/1.2, h); //Base
+  fill(colorPalette[15]);
+  
+  rect(w/2.2, 0, w/9.8, h); //Side
+  strokeWeight(5);
+  circle(-w/4, 25, 25); //Handle
   popMatrix();
 }
 void drawDoor(float x, float y, float w, float h)
