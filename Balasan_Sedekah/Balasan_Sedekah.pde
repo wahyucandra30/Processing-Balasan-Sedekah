@@ -19,7 +19,7 @@ String text5 = "Untuk menghemat pengeluaran perusahaan...";
 String text6 = "Gaji kamu bulan ini saya potong 10 persen";
 float eyeWidth_B = 14, eyeHeight_B = 15, eyeWidth_Y = 14, eyeHeight_Y = 15;
 int[] blinkIntervals = {60, 60, 90, 120};
-int counter = 0;
+int counter = 4000;
 int textCounter = 0;
 
 color fadeInAlpha1 = 255, fadeInAlpha2 = 255;
@@ -331,6 +331,8 @@ void drawScene1C(float duration, float position)
   drawDoor(-3470, 405, 270, 450);
   drawDoorLabel(-3470, 125, 125, 50);
   
+  drawVent(-2300, 575);
+  
   drawPlant(-2000, 575, 0.8, 0.9);
   
   drawSofa(-1750, 565);
@@ -365,9 +367,9 @@ void drawScene2A(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
   text("PRO: " + nf(progress, 0, 3), 20, 115);
+  bgCol = colorPalette[4];
   if(progress < 0.1)
   {
-    bgCol = colorPalette[4];
     fadeInAlpha1 = 255;
     fadeOutAlpha1 = 255;
   }
@@ -381,71 +383,111 @@ void drawScene2A(float duration, float position)
     {
       fadeVolume_office_radio = 0;
     }
-  }
-  
-  fill(color(0), fadeOutAlpha1);
-  if(progress > 0.25)
-  {
-    bgDis2.x++;
-    if(fadeInAlpha1 > 1)
-    {
-      fadeInAlpha1-= 5;
-    }
-    else
-    {
-      fadeInAlpha1 = 0;
-    }
-    
-    drawSun2(400, 300, 225);
-    pushMatrix();
-    translate(bgDis2.x/4, bgDis2.y);
-    drawCloud(width/1.5, height/2, -0.5, 0.5);
-    popMatrix();
-    pushMatrix();
-    translate(bgDis2.x/2, bgDis2.y);
-    drawCloud(350, 450, 1, 1);
-    popMatrix();
-    pushMatrix();
-    translate(bgDis2.x*2, bgDis2.y);
-    drawCloud(500, 750, 2, 2);
-    popMatrix();
-    fill(color(0), fadeInAlpha1);
-  }
-  noStroke();
-  rect(width/2, height/2, width*2, height*2);
-  if(progress > 0.075)
-  {
-    if(progress < 0.2)
-    {
-      if(fadeOutAlpha2 < 255)
-      {
-        fadeOutAlpha2 += 5;
-      }
-      else
-      {
-        fadeOutAlpha2 = 255;
-      }
-    }
-    fill(color(255), fadeOutAlpha2);
+    fill(color(0), fadeOutAlpha1);
     if(progress > 0.25)
     {
-      if(fadeInAlpha2 > 0)
+      bgDis2.x++;
+      if(fadeInAlpha1 > 1)
       {
-        fadeInAlpha2 -= 5;
+        fadeInAlpha1-= 5;
       }
       else
       {
-        fadeInAlpha2 = 0;
+        fadeInAlpha1 = 0;
       }
-      fill(color(255), fadeInAlpha2);
+      
+      drawSun2(400, 300, 225);
+      pushMatrix();
+      translate(bgDis2.x/4, bgDis2.y);
+      drawCloud(width/1.5, height/2, -0.5, 0.5);
+      popMatrix();
+      pushMatrix();
+      translate(bgDis2.x/2, bgDis2.y);
+      drawCloud(350, 450, 1, 1);
+      popMatrix();
+      pushMatrix();
+      translate(bgDis2.x*2, bgDis2.y);
+      drawCloud(500, 750, 2, 2);
+      popMatrix();
+      fill(color(0), fadeInAlpha1);
     }
-    textSize(64);
-    textAlign(CENTER);
-    textFont(font4);
-    text("BEBERAPA WAKTU KEMUDIAN", width/2, height/2);
+    noStroke();
+    rect(width/2, height/2, width*2, height*2);
+    if(progress > 0.075)
+    {
+      if(progress < 0.2)
+      {
+        if(fadeOutAlpha2 < 255)
+        {
+          fadeOutAlpha2 += 5;
+        }
+        else
+        {
+          fadeOutAlpha2 = 255;
+        }
+      }
+      fill(color(255), fadeOutAlpha2);
+      if(progress > 0.25)
+      {
+        if(fadeInAlpha2 > 0)
+        {
+          fadeInAlpha2 -= 5;
+        }
+        else
+        {
+          fadeInAlpha2 = 0;
+        }
+        fill(color(255), fadeInAlpha2);
+      }
+      textSize(64);
+      textAlign(CENTER);
+      textFont(font4);
+      text("BEBERAPA WAKTU KEMUDIAN", width/2, height/2);
+    }
   }
+  else if(progress < 6)
+  {
+    if(progress == 6)
+    {
+      bgDis2.x = 0;
+    }
+    bgDis2.x--;
+    headRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+    torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
+    handRotLeft_B = -sin((norm(counter, 0, 1)/15f)) * 20;
+    handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 20;
+    legRot_B = sin((norm(counter, 0, 1)/15f)) * 10;
+    
+    pushMatrix();
+    translate(bgDis2.x*4, bgDis2.y);
+    fill(colorPalette[14]);
+    strokeWeight(6);
+    rect(2750, 300, 150, 900);
+    noStroke();
+    fill(colorPalette[15]);
+    rect(2685, 300, 20, 900); //Shadow
+    stroke(colorPalette[0]);
+    strokeWeight(6);
+    drawBrickWall(800, 650, 700, 250, 70);
+    drawBrickWall(2000, 650, 1200, 250, 70);
+    
+    popMatrix();
+    drawBudi(1500, -400, -2, 2,"standing");
+  }
+  
   s_office_radio.amp(fadeVolume_office_radio);
   filter(ERODE);
+}
+void drawBrickWall(float x, float y, float w, float h, float d)
+{
+  pushMatrix();
+  translate(x, y);
+  strokeWeight(6);
+  fill(colorPalette[14]);
+  rect(0, 0, w-d, h);//Front
+  fill(colorPalette[15]);
+  rect(-w/2+d, 0, d, h);//Side
+  popMatrix();
 }
 void drawSun2(float x, float y, float r)
 {  
@@ -577,12 +619,16 @@ void drawBudi(float x, float y, float xScale, float yScale, String stance)
 
   drawLegStraight(575, 465, 1.1, 1.1, -legRot_B, colorPalette[1], colorPalette[5]);
   drawLegStraight(620, 466, 1.1, 1.1, legRot_B, colorPalette[7], colorPalette[5]);
-
+  
   drawTorsoSuit(590, 415, 1, 1, torsoRot_B);
 
   drawHeadBudi(586, 428, 1, 1, -headRot_B);
 
-  drawArmStraight(620, 395, 1.2, 1.1, handRotLeft_B, colorPalette[7], colorPalette[2]);
+  if (stance.toLowerCase().equals("standing"))
+  {
+    drawArmStraight(620, 395, 1.2, 1.1, handRotLeft_B, colorPalette[7], colorPalette[2]);
+  }
+  
   popMatrix();
 }
 void drawYanto(float x, float y, String stance)
@@ -599,8 +645,8 @@ void drawYanto(float x, float y, String stance)
   else if (stance.toLowerCase().equals("standing"))
   {
     drawArmStraight(585, 410, -1, 0.9, handRotLeft_Y, colorPalette[11], colorPalette[2]);
-    drawLegStraight(575, 465, -1.1, 1.1, -legRot_Y, colorPalette[1], colorPalette[5]);
-    drawLegStraight(620, 466, -1.1, 1.1, legRot_Y, colorPalette[7], colorPalette[5]);
+    drawLegStraight(600, 465, -1.1, 1.1, -legRot_Y, colorPalette[1], colorPalette[5]);
+    drawLegStraight(555, 466, -1.1, 1.1, legRot_Y, colorPalette[7], colorPalette[5]);
   }
 
   drawTorsoShirt(590, 415, -1, 1, torsoRot_Y);
