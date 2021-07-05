@@ -16,7 +16,7 @@ String text2 = "Jabatan: Regional Manager";
 String text3 = "Motto: \"Aku cinta uang.\"";
 String text4 = "Hei, Yanto...";
 String text5 = "Untuk menghemat pengeluaran perusahaan...";
-String text6 = "Gaji kamu bulan ini saya potong 10 persen.";
+String text6 = "Gaji kamu bulan ini saya potong 10 persen";
 float eyeWidth_B = 14, eyeHeight_B = 15, eyeWidth_Y = 14, eyeHeight_Y = 15;
 int[] blinkIntervals = {60, 60, 90, 120};
 int counter = 0;
@@ -26,7 +26,7 @@ color fadeInAlpha1 = 255, fadeInAlpha2 = 255;
 color fadeOutAlpha1 = 0, fadeOutAlpha2 = 0;
 float secondHandAngle = 90;
 
-PVector bgDis = new PVector(0, 0);
+PVector bgDis1 = new PVector(0, 0), bgDis2 = new PVector(0, 0);
 PVector fgDis = new PVector(0, 0);
 //Pak Budi
 float headRot_B = 0, torsoRot_B = 0, handRotLeft_B = 0, handRotRight_B = 0, legRot_B = 0;
@@ -198,7 +198,7 @@ void drawScene1C(float duration, float position)
   }
   if (progress < 0.467)
   {
-    bgDis.x++;
+    bgDis1.x++;
     headRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
     torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
     handRotLeft_B = -sin((norm(counter, 0, 1)/15f)) * 30;
@@ -307,7 +307,7 @@ void drawScene1C(float duration, float position)
     }
   }
   pushMatrix();
-  translate(bgDis.x * 4, bgDis.y);
+  translate(bgDis1.x * 4, bgDis1.y);
   translate(fgDis.x * 10, fgDis.y);
   fill(colorPalette[9]);
   
@@ -316,8 +316,8 @@ void drawScene1C(float duration, float position)
   
   noStroke();
   pushMatrix();
-  translate(-bgDis.x/3.5, 0);
-  drawSun(-1500, 310);
+  translate(-bgDis1.x/3.5, 0);
+  drawSun1(-1500, 310);
   popMatrix();
   
   fill(colorPalette[14]);
@@ -367,7 +367,7 @@ void drawScene2A(float duration, float position)
   text("PRO: " + nf(progress, 0, 3), 20, 115);
   if(progress < 0.1)
   {
-    bgCol = colorPalette[17];
+    bgCol = colorPalette[4];
     fadeInAlpha1 = 255;
     fadeOutAlpha1 = 255;
   }
@@ -386,6 +386,7 @@ void drawScene2A(float duration, float position)
   fill(color(0), fadeOutAlpha1);
   if(progress > 0.25)
   {
+    bgDis2.x++;
     if(fadeInAlpha1 > 1)
     {
       fadeInAlpha1-= 5;
@@ -394,6 +395,20 @@ void drawScene2A(float duration, float position)
     {
       fadeInAlpha1 = 0;
     }
+    
+    drawSun2(400, 300, 225);
+    pushMatrix();
+    translate(bgDis2.x/4, bgDis2.y);
+    drawCloud(width/1.5, height/2, -0.5, 0.5);
+    popMatrix();
+    pushMatrix();
+    translate(bgDis2.x/2, bgDis2.y);
+    drawCloud(350, 450, 1, 1);
+    popMatrix();
+    pushMatrix();
+    translate(bgDis2.x*2, bgDis2.y);
+    drawCloud(500, 750, 2, 2);
+    popMatrix();
     fill(color(0), fadeInAlpha1);
   }
   noStroke();
@@ -431,6 +446,37 @@ void drawScene2A(float duration, float position)
   }
   s_office_radio.amp(fadeVolume_office_radio);
   filter(ERODE);
+}
+void drawSun2(float x, float y, float r)
+{  
+  pushMatrix();
+  translate(x, y);
+  fill(colorPalette[11]);
+  stroke(colorPalette[0]);
+  strokeWeight(6);
+  circle(0, 0, r);
+  popMatrix();
+}
+void drawCloud(float x, float y, float xScale, float yScale)
+{
+  pushMatrix();
+  translate(x, y);
+  scale(xScale, yScale);
+  fill(colorPalette[14]);
+  stroke(color(0));
+  createShape();
+  beginShape();
+  vertex(-150, 0);
+  vertex(150, 0);
+  bezierVertex(160, -60, 90, -60, 75, -50);
+  bezierVertex(75, -150, -100, -150, -100, -60);
+  bezierVertex(-125, -70, -170, -40, -150, 0);
+  endShape(CLOSE);
+  
+  fill(color(255,0,0));
+  noStroke();
+  //circle(0,0, 10);
+  popMatrix();
 }
 void drawClock(float x, float y)
 {
@@ -988,7 +1034,7 @@ void drawWall()
   vertex(0, height);
   endShape(CLOSE);
 }
-void drawSun(float x, float y)
+void drawSun1(float x, float y)
 {
   pushMatrix();
   translate(x, y);

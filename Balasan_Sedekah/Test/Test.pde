@@ -20,7 +20,7 @@ void setup()
 void draw()
 {
   counter++;
-  background(colorPalette[17]);
+  background(colorPalette[4]);
   
   drawScene2A(30, 0);
   filter(ERODE);
@@ -28,7 +28,9 @@ void draw()
 void drawScene2A(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
-  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  textSize(24);
+  fill(color(0));
+  text("PRO: " + nf(progress, 0, 3), 20, 65);
   
   fill(color(0), 255);
   if(progress > 0.25)
@@ -37,7 +39,7 @@ void drawScene2A(float duration, float position)
   }
   rectMode(CENTER);
   noStroke();
-  rect(width/2, height/2, width*2, height*2);
+  //rect(width/2, height/2, width*2, height*2);
   if(progress > 0.075)
   {
     fill(color(255), 255);
@@ -45,12 +47,46 @@ void drawScene2A(float duration, float position)
     {
       fill(color(255), 0);
     }
-    textSize(64);
-    textAlign(CENTER);
+    //textSize(64);
+   // textAlign(CENTER);
     //textFont(font4);
-    text("BEBERAPA WAKTU KEMUDIAN", width/2, height/2);
+    //text("BEBERAPA WAKTU KEMUDIAN", width/2, height/2);
   }
+  drawSun2(400, 300, 225);
+  drawCloud(width/1.5, height/2, -0.5, 0.5);
+  drawCloud(350, 450, 1, 1);
+  drawCloud(800, 750, 2, 2);
   filter(ERODE);
+}
+void drawSun2(float x, float y, float r)
+{  
+  pushMatrix();
+  translate(x, y);
+  fill(colorPalette[11]);
+  stroke(colorPalette[0]);
+  circle(0, 0, r);
+  popMatrix();
+}
+void drawCloud(float x, float y, float xScale, float yScale)
+{
+  pushMatrix();
+  translate(x, y);
+  scale(xScale, yScale);
+  fill(colorPalette[14]);
+  stroke(color(0));
+  createShape();
+  beginShape();
+  vertex(-150, 0);
+  vertex(150, 0);
+  bezierVertex(160, -60, 90, -60, 75, -50);
+  bezierVertex(75, -150, -100, -150, -100, -60);
+  bezierVertex(-125, -70, -170, -40, -150, 0);
+  endShape(CLOSE);
+  
+  fill(color(255,0,0));
+  noStroke();
+  //circle(0,0, 10);
+  popMatrix();
 }
 void drawSofa(float x, float y)
 {
