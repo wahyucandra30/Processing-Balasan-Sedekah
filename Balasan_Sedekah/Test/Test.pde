@@ -22,7 +22,7 @@ void draw()
   counter++;
   background(colorPalette[4]);
   
-  drawScene2A(30, 0);
+  drawBeggar(0, 0, "standing");
   filter(ERODE);
 }
 void drawScene2A(float duration, float position)
@@ -198,7 +198,7 @@ void drawChair(float x, float y)
   popMatrix();
 }
 
-void drawYanto(float x, float y, String stance)
+void drawBeggar(float x, float y, String stance)
 {
   pushMatrix();
   translate(x, y);

@@ -1,11 +1,11 @@
 import processing.sound.*;
 
 SoundFile s_clock_ticking, s_office_ambience, s_ding, s_typewriter, s_office_radio, s_swish,
-          s_budi_s1_1, s_budi_s1_2, s_budi_s1_3;
+          s_budi_s1_1, s_budi_s1_2, s_budi_s1_3, s_birds, s_street_ambience, s_huh;
 float fadeVolume_office_radio = 0.5;
 
 int[] colorPalette = {#2a2329,#454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce,
-                      #deeafa, #56ad7a, #eab353, #233f71, #546c96, #e9edf3, #d1d5db, #83858b, #f8a44e,
+                      #deeafa, #56ad7a, #eab353, #233f71, #546c96, #e9edf3, #d1d5db, #83858b, #f7c6b2,
                       #6b3b1a, #925122};
 color bgCol;
                       
@@ -16,9 +16,17 @@ String text3 = "Motto: \"Aku cinta uang.\"";
 String text4 = "Hei, Yanto...";
 String text5 = "Untuk menghemat pengeluaran perusahaan...";
 String text6 = "Gaji kamu bulan ini saya potong 10 persen";
+String text7 = "Ini saya ada uang...";
+String text8 = "Saya niatkan untuk sedekah...";
+String text9 = "Semoga sumbangan ini membantu...";
+String text10 = "Hmmmmm...";
+String text11 = "Itu kan Yanto...";
+String text12 = "Bukannya gajinya tadi kupotong?";
+String text13 = "Halo Pak Budi...";
+String text14 = "Ada apa ya?";
 float eyeWidth_B = 14, eyeHeight_B = 15, eyeWidth_Y = 14, eyeHeight_Y = 15;
 int[] blinkIntervals = {60, 60, 90, 120};
-int counter = 3100;
+int counter = 7900;
 int textCounter = 0;
 
 color fadeInAlpha1 = 255, fadeInAlpha2 = 255;
@@ -31,6 +39,9 @@ PVector fgDis = new PVector(0, 0);
 float headRot_B = 0, torsoRot_B = 0, handRotLeft_B = 0, handRotRight_B = 0, legRot_B = 0;
 //Pak Yanto
 float headRot_Y = 0, torsoRot_Y = 0, handRotLeft_Y = 0, handRotRight_Y = 0, legRot_Y = 0;
+//Pak Buta
+float headRot_BT = 0, torsoRot_BT = 0, handRotLeft_BT = 0, handRotRight_BT = 0, legRot_BT = 0;
+
 float[] mouthVerts_Y = {-30, -64, -28, -56, -18, -56, -16, -64};
 
 void setup()
@@ -51,6 +62,9 @@ void setup()
   s_budi_s1_1 = new SoundFile(this, "sounds/budi-s1-1.wav");
   s_budi_s1_2 = new SoundFile(this, "sounds/budi-s1-2.wav");
   s_budi_s1_3 = new SoundFile(this, "sounds/budi-s1-3.wav");
+  s_birds = new SoundFile(this, "sounds/birds.wav");
+  s_street_ambience = new SoundFile(this, "sounds/street-ambience.wav");
+  s_huh = new SoundFile(this, "sounds/huh.wav");
   defaultFont = createFont("fonts/Lucida Sans.ttf", 48);
   font1 = createFont("fonts/Heathergreen-XPPG.ttf", 48);
   font2 = createFont("fonts/AgentOrange.ttf", 48);
@@ -92,12 +106,26 @@ void draw()
   {
     drawScene2A(30, 54);
   }
+  else if(frameToSec(counter) < 98)
+  {
+    drawScene2B(14, 84);
+  }
+  else if(frameToSec(counter) < 113)
+  {
+    drawScene2C(15, 98);
+  }
+  else if(frameToSec(counter) < 133)
+  {
+    drawScene2D(20, 113);
+  }
+  else if(frameToSec(counter) < 140)
+  {
+    drawScene2E(7, 133);
+  }
   //*/
   
   //drawScene1B(14, 0);
-  //drawScene1C(30, 0);
-  
-  
+  //drawScene1C(30, 0);  
 }
 void drawScene1A(float duration, float position)
 {
@@ -348,7 +376,7 @@ void drawScene1C(float duration, float position)
   drawPlant(-1200, 575, 0.8, 0.9);
   
   drawChair(-3200, 600);
-  drawYanto(-3800, 60, "sitting");
+  drawYanto(-3800, 60, 1, 1,"sitting");
   //drawTable(-3150, 560);
   drawTable(-2900, 550);
   popMatrix();
@@ -385,6 +413,11 @@ void drawScene2A(float duration, float position)
       fadeVolume_office_radio = 0;
     }
     fill(color(0), fadeOutAlpha1);
+    if(progress > 0.2 && progress < 0.201)
+    {
+      s_birds.amp(0.5);
+      s_birds.play();
+    }
     if(progress > 0.25)
     {
       bgDis2.x++;
@@ -446,8 +479,14 @@ void drawScene2A(float duration, float position)
       text("BEBERAPA WAKTU KEMUDIAN", width/2, height/2);
     }
   }
-  else if(progress < 6)
+  else
   {
+    s_birds.stop();
+    if(progress < 0.4001)
+    {
+      s_street_ambience.amp(0.5);
+      s_street_ambience.play();
+    }
     bgDis3.x--;
     if(progress == 6)
     {
@@ -499,18 +538,40 @@ void drawScene2A(float duration, float position)
     stroke(colorPalette[8]);
     fill(colorPalette[4]);
     rect(1500, 800, 200, 1000);
-    rect(1800, 600, 300, 1000);
-    rect(2000, 800, 300, 1000);
-    rect(2500, 700, 300, 1000);
-    rect(2300, 600, 200, 1000);
+    rect(1800, 600, 300, 1000); rect(1800, 100, 310, 25);
+    rect(2000, 800, 300, 1000); rect(2000, 300, 310, 25); rect(2075, 262, 50, 50);
+    rect(2300, 600, 200, 1000); rect(2300, 100, 210, 25); rect(2300, 175, 150, 75); rect(2425, 190, 50, 125);
+    rect(2500, 800, 300, 1000); rect(2500, 300, 310, 25);
     
+    rect(1700, 150, 50, 25);
+    rect(1800, 150, 100, 25);
+    rect(1900, 150, 50, 25);
+    rect(1725, 200, 100, 25);
+    rect(1825, 200, 50, 25);
+    rect(1900, 200, 50, 25);
+    
+    rect(1900, 350, 50, 25);
+    rect(2000, 350, 100, 25);
+    rect(2100, 350, 50, 25);
+    rect(1900, 400, 50, 25);
+    rect(1975, 400, 50, 25);
+    rect(2075, 400, 100, 25);
+    
+    rect(2400, 350, 50, 25);
+    rect(2475, 350, 50, 25);
+    rect(2575, 350, 100, 25);
+    rect(2400, 400, 50, 25);
+    rect(2500, 400, 100, 25);
+    rect(2600, 400, 50, 25);
     popMatrix();
     
+    //Brick Wall
     fill(colorPalette[3]);
     stroke(colorPalette[0]);
     strokeWeight(7);
     rect(3000 , 600, 3000, 350);
     
+    //Pole
     fill(colorPalette[14]);
     strokeWeight(6);
     stroke(colorPalette[0]);
@@ -522,7 +583,8 @@ void drawScene2A(float duration, float position)
     strokeWeight(6);
     
     
-    
+    //Building
+    rect(0, 400, 1600, 500);
     rect(1600, 400, 1600, 500);
     rect(1250, 400, 1600, 900);
     
@@ -551,20 +613,401 @@ void drawScene2A(float duration, float position)
     fill(colorPalette[16]);
     rect(1250, 700, 400, 100);
     
-    drawBrickWall(500, 650, 1200, 250, 70);
+    drawBrickWall(-100, 650, 2500, 250, 70);
     drawBrickWall(2000, 650, 1200, 250, 70);
     
     
     popMatrix();
     drawBudi(1500, -400, -2, 2,"standing");
-    drawSilhouette(600, -400, 2, -2, "standing");
-    if(progress > 0.83)
+    if(progress > 0.875)
     {
+      if(progress < 0.876)
+      {
+        s_huh.amp(2);
+        s_huh.play();
+      }
       drawQuestionMark(550, 275, 120);
     }
   }
   
   s_office_radio.amp(fadeVolume_office_radio);
+  filter(ERODE);
+}
+void drawScene2B(float duration, float position)
+{
+  float progress = (frameToSec(counter)-position)/duration;
+  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  
+  headRot_BT = sin((norm(counter, 0, 1)/15f)) * 1.2;
+  torsoRot_BT = sin((norm(counter, 0, 1)/15f)) * 1.2;
+  handRotLeft_BT = sin((norm(counter, 0, 1)/15f)) * 0.2 + 30;
+  handRotRight_BT = sin((norm(counter, 0, 1)/15f)) * 0.2 + 30;
+  legRot_BT = sin((norm(counter, 0, 1)/15f)) * 0;
+  
+  headRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.3;
+  torsoRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.1;
+  handRotLeft_Y = -sin((norm(counter, 0, 1)/15f)) * 0.3;
+  handRotRight_Y = -sin((norm(counter, 0, 1)/15f)) * 0.3 - 45;
+  
+  bgCol = colorPalette[4];
+  
+  
+  
+  pushMatrix();
+    translate(-1500, -100);
+    stroke(colorPalette[8]);
+    strokeWeight(6);
+    fill(colorPalette[4]);
+    rect(1500, 800, 200, 1000);
+    rect(1800, 600, 300, 1000); rect(1800, 100, 310, 25);
+    rect(2000, 800, 300, 1000); rect(2000, 300, 310, 25); rect(2075, 262, 50, 50);
+    rect(2300, 600, 200, 1000); rect(2300, 100, 210, 25); rect(2300, 175, 150, 75); rect(2425, 190, 50, 125);
+    rect(2500, 800, 300, 1000); rect(2500, 300, 310, 25);
+    
+    rect(1700, 150, 50, 25);
+    rect(1800, 150, 100, 25);
+    rect(1900, 150, 50, 25);
+    rect(1725, 200, 100, 25);
+    rect(1825, 200, 50, 25);
+    rect(1900, 200, 50, 25);
+    
+    rect(1900, 350, 50, 25);
+    rect(2000, 350, 100, 25);
+    rect(2100, 350, 50, 25);
+    rect(1900, 400, 50, 25);
+    rect(1975, 400, 50, 25);
+    rect(2075, 400, 100, 25);
+    
+    rect(2400, 350, 50, 25);
+    rect(2475, 350, 50, 25);
+    rect(2575, 350, 100, 25);
+    rect(2400, 400, 50, 25);
+    rect(2500, 400, 100, 25);
+    rect(2600, 400, 50, 25);
+    popMatrix();
+  
+  //Brick Wall
+  fill(colorPalette[3]);
+  stroke(colorPalette[0]);
+  strokeWeight(7);
+  rect(width/2 , 550, width, 450);
+  
+  fill(colorPalette[5]);
+  stroke(colorPalette[0]);
+  strokeWeight(4);
+  rect(1100 , 430, 250, 150);
+  textFont(defaultFont);
+  textSize(32);
+  fill(color(0));
+  text("Sumbangan", 990, 400);
+  text("Pembangunan", 990, 440);
+  text("Masjid", 990, 480);
+  ////Side Walk
+  //fill(colorPalette[16]);
+  //stroke(colorPalette[0]);
+  //strokeWeight(7);
+  //rect(width/2 , 850, width, 350);
+  
+  fill(colorPalette[10]);
+  pushMatrix();
+  translate(0, handRotRight_Y * 6);
+  rect(500, 825, 75, 35); //Uang
+  popMatrix();
+  drawYanto(-550, -200, 1.5, 1.5, "standing");
+  drawBlind(-50, -200, 1.5, 1.5, "standing");
+  
+  if(progress > 0.1)
+  {
+    textFont(font3);
+    textSize(32);
+    fill(colorPalette[0]);
+    if(progress < 0.3)
+    {
+      typewriteText(text7, 200, 160, 4, 0);
+    }
+    else if(progress < 0.6)
+    {
+      typewriteText(text8, 200, 160, 4, text7.length());
+    }
+    else if(progress < 0.95)
+    {
+      typewriteText(text9, 200, 160, 4, text7.length() + text8.length());
+    }
+  }
+  
+  filter(ERODE);
+}
+void drawScene2C(float duration, float position)
+{
+  float progress = (frameToSec(counter)-position)/duration;
+  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  
+  if(progress < 0.05)
+  {
+    textCounter = 0;
+    fgDis.x = 0;
+  }
+  if(progress < 0.75)
+  {
+    headRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+    torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+    handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
+    handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
+    legRot_B = sin((norm(counter, 0, 1)/15f)) * 0;
+  }
+  else
+  {
+    fgDis.x++;
+    headRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
+    torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
+    handRotLeft_B = -sin((norm(counter, 0, 1)/15f)) * 30;
+    handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 30;
+    legRot_B = sin((norm(counter, 0, 1)/15f)) * 10;
+    handRotLeft_Y = -15;
+    handRotRight_Y = -30;
+  }
+  pushMatrix();
+  translate(fgDis.x * 6, fgDis.y);
+  drawBudi(2000, -750, -3, 3,"standing");
+  popMatrix();
+  if(progress > 0.1)
+  {
+    textFont(font3);
+    textSize(32);
+    fill(colorPalette[0]);
+    if(progress < 0.2)
+    {
+      typewriteText(text10, 550, 300, 4, 0);
+    }
+    else if(progress < 0.4)
+    {
+      typewriteText(text11, 550, 300, 4, text10.length());
+    }
+    else if(progress < 0.65)
+    {
+      typewriteText(text12, 550, 300, 4, text10.length() + text11.length());
+    }
+    
+  }
+  
+  filter(ERODE);
+}
+void drawScene2D(float duration, float position)
+{
+  float progress = (frameToSec(counter)-position)/duration;
+  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  
+  if(progress < 0.05)
+  {
+    fgDis.x = 0;
+    textCounter = 0;
+    mouthVerts_Y = new float[]{-30, -64, -28, -56, -18, -56, -16, -64};
+  }
+  
+  if(progress > 0.1 && progress < 0.3)
+  {
+    fgDis.x++;
+    headRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
+    torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
+    handRotLeft_B = -sin((norm(counter, 0, 1)/15f)) * 30;
+    handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 30;
+    legRot_B = sin((norm(counter, 0, 1)/15f)) * 10;
+    handRotLeft_Y = -15;
+    handRotRight_Y = -30;
+  }
+  if(progress > 0.3 && progress < 0.32)
+  {
+    headRot_B = lerp(headRot_B, 0, frameToSec(counter)/1000);
+    torsoRot_B = lerp(torsoRot_B, 0, frameToSec(counter)/1000);
+    handRotLeft_B = lerp(handRotLeft_B, 0, frameToSec(counter)/1000);
+    handRotRight_B = -lerp(handRotLeft_B, 0, frameToSec(counter)/1000);
+    legRot_B = lerp(legRot_B, 0, frameToSec(counter)/1000);
+  }
+  else if(progress > 0.32)
+  {
+    headRot_B = -sin((norm(counter, 0, 1)/15f)) * 1.2;
+    torsoRot_B = -sin((norm(counter, 0, 1)/15f)) * 1.2;
+    handRotLeft_B = -sin((norm(counter, 0, 1)/15f)) * 0.2;
+    handRotRight_B = -sin((norm(counter, 0, 1)/15f)) * 0.2;
+    legRot_B = -sin((norm(counter, 0, 1)/15f)) * 0;
+  }
+  headRot_BT = sin((norm(counter, 0, 1)/15f)) * 1.2;
+  torsoRot_BT = sin((norm(counter, 0, 1)/15f)) * 1.2;
+  handRotLeft_BT = sin((norm(counter, 0, 1)/15f)) * 0.2 + 30;
+  handRotRight_BT = sin((norm(counter, 0, 1)/15f)) * 0.2 + 30;
+  legRot_BT = sin((norm(counter, 0, 1)/15f)) * 0;
+  
+  headRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.3;
+  torsoRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.1;
+  handRotLeft_Y = -sin((norm(counter, 0, 1)/15f)) * 0.3;
+  handRotRight_Y = -sin((norm(counter, 0, 1)/15f)) * 0.3;
+  
+  bgCol = colorPalette[4];
+
+  pushMatrix();
+    translate(-1500, -100);
+    stroke(colorPalette[8]);
+    strokeWeight(6);
+    fill(colorPalette[4]);
+    rect(1500, 800, 200, 1000);
+    rect(1800, 600, 300, 1000); rect(1800, 100, 310, 25);
+    rect(2000, 800, 300, 1000); rect(2000, 300, 310, 25); rect(2075, 262, 50, 50);
+    rect(2300, 600, 200, 1000); rect(2300, 100, 210, 25); rect(2300, 175, 150, 75); rect(2425, 190, 50, 125);
+    rect(2500, 800, 300, 1000); rect(2500, 300, 310, 25);
+    
+    rect(1700, 150, 50, 25);
+    rect(1800, 150, 100, 25);
+    rect(1900, 150, 50, 25);
+    rect(1725, 200, 100, 25);
+    rect(1825, 200, 50, 25);
+    rect(1900, 200, 50, 25);
+    
+    rect(1900, 350, 50, 25);
+    rect(2000, 350, 100, 25);
+    rect(2100, 350, 50, 25);
+    rect(1900, 400, 50, 25);
+    rect(1975, 400, 50, 25);
+    rect(2075, 400, 100, 25);
+    
+    rect(2400, 350, 50, 25);
+    rect(2475, 350, 50, 25);
+    rect(2575, 350, 100, 25);
+    rect(2400, 400, 50, 25);
+    rect(2500, 400, 100, 25);
+    rect(2600, 400, 50, 25);
+    popMatrix();
+  
+  //Brick Wall
+  fill(colorPalette[3]);
+  stroke(colorPalette[0]);
+  strokeWeight(7);
+  rect(width/2 , 550, width + 500, 450);
+  
+  pushMatrix();
+  translate(400, 0);
+  fill(colorPalette[5]);
+  stroke(colorPalette[0]);
+  strokeWeight(4);
+  rect(1100 , 430, 250, 150);
+  textFont(defaultFont);
+  textSize(32);
+  fill(color(0));
+  text("Sumbangan", 990, 400);
+  text("Pembangunan", 990, 440);
+  text("Masjid", 990, 480);
+  ////Side Walk
+  //fill(colorPalette[16]);
+  //stroke(colorPalette[0]);
+  //strokeWeight(7);
+  //rect(width/2 , 850, width, 350);
+  
+  pushMatrix();
+  translate(fgDis.x * 3, 0);
+  drawBudi(0, -200, -1.5, 1.5,"standing");
+  popMatrix();
+  if(progress > 0.8 && progress < 0.86)
+  {
+    mouthVerts_Y[1] += 0.1;
+    mouthVerts_Y[3] -= 0.1;
+    mouthVerts_Y[5] -= 0.1;
+    mouthVerts_Y[7] += 0.1;
+  }
+  if(progress < 0.7)
+  {
+    drawYanto(-550, -200, 1.5, 1.5, "standing");
+  }
+  else
+  {
+    drawYanto(1200, -200, -1.5, 1.5, "standing");
+  }
+  
+  drawBlind(-50, -200, 1.5, 1.5, "standing");
+  
+  if(progress > 0.45)
+  {
+    if(progress < 0.451)
+    {
+      s_budi_s1_1.play();
+    }
+    if(progress < 0.6)
+    {
+      textFont(font3);
+      textSize(32);
+      fill(colorPalette[0]);
+      typewriteText(text4, -100, 190, 4, 0);
+    }
+  }
+  
+  popMatrix();
+  filter(ERODE);
+}
+void drawScene2E(float duration, float position)
+{
+  float progress = (frameToSec(counter)-position)/duration;
+  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  
+  headRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.3;
+  torsoRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.1;
+  handRotLeft_Y = -sin((norm(counter, 0, 1)/15f)) * 0.3;
+  handRotRight_Y = -sin((norm(counter, 0, 1)/15f)) * 0.3;
+  
+  drawYanto(2700, -700, -3, 3, "standing");
+  
+  if(progress < 0.05)
+  {
+    textCounter = 0;
+  }
+  
+  if(progress > 0.2)
+  {
+    textFont(font3);
+    textSize(32);
+    fill(colorPalette[0]);
+    if(progress < 0.6)
+    {
+      typewriteText(text13, 400, 300, 4, 0);
+    }
+    else if(progress < 0.9)
+    {
+      typewriteText(text14, 400, 300, 4, text13.length());
+    }
+  }
+  
+  filter(ERODE);
+}
+void drawScene2F(float duration, float position)
+{
+  float progress = (frameToSec(counter)-position)/duration;
+  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  
+  headRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+  torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+  handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
+  handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
+  legRot_B = sin((norm(counter, 0, 1)/15f)) * 0;
+  
+  drawBudi(2000, -750, -3, 3,"standing");
+  if(progress > 0.1)
+  {
+    textFont(font3);
+    textSize(32);
+    fill(colorPalette[0]);
+    if(progress < 0.2)
+    {
+      typewriteText(text10, 550, 300, 4, 0);
+    }
+    else if(progress < 0.4)
+    {
+      typewriteText(text11, 550, 300, 4, text10.length());
+    }
+    else if(progress < 0.65)
+    {
+      typewriteText(text12, 550, 300, 4, text10.length() + text11.length());
+    }
+    
+  }
+  
+
   filter(ERODE);
 }
 void drawQuestionMark(float x, float y, float size)
@@ -713,23 +1156,36 @@ void typewriteText(String s, float x, float y, float interval, int offset)
     text(s, x, y);
   }
 }
-void drawSilhouette(float x, float y, float xScale, float yScale, String stance)
+void drawBlind(float x, float y, float xScale, float yScale, String stance)
 {
   pushMatrix();
   translate(x, y);
   scale(xScale, yScale);
-  drawArmStraight(585, 410, 1, 0.9, handRotRight_B, colorPalette[0], colorPalette[0]);
+  drawArmBent(585, 410, 1, 0.9, handRotRight_BT, colorPalette[1], colorPalette[17]);
 
-  drawLegStraight(575, 465, 1.1, 1.1, -legRot_B, colorPalette[0], colorPalette[0]);
-  drawLegStraight(620, 466, 1.1, 1.1, legRot_B, colorPalette[0], colorPalette[0]);
+  drawLegStraight(575, 465, 1.1, 1.1, -legRot_BT, colorPalette[1], colorPalette[0]);
+  drawLegStraight(620, 466, 1.1, 1.1, legRot_BT, colorPalette[1], colorPalette[0]);
   
-  drawTorsoSilhouette(590, 415, 1, 1, torsoRot_B);
+  drawTorsoBlind(590, 415, 1, 1, torsoRot_BT);
 
-  drawHeadSilhouette(586, 428, 1, 1, -headRot_B);
+  drawHeadBlind(586, 428, 1, 1, -headRot_BT);
 
+  //Kardus
+  pushMatrix();
+  translate(0, -handRotRight_BT*4);
+  fill(colorPalette[19]);
+  rectMode(CENTER);
+  rect(500, 575, 125, 100);
+  fill(colorPalette[15]);
+  rect(500, 538, 125, 25);
+  fill(colorPalette[18]);
+  rect(450, 575, 25, 100);
+  fill(colorPalette[16]);
+  rect(450, 538, 25, 25);
+  popMatrix();
   if (stance.toLowerCase().equals("standing"))
   {
-    drawArmStraight(620, 395, 1.2, 1.1, handRotLeft_B, colorPalette[7], colorPalette[2]);
+    drawArmBent(620, 395, 1.2, 1.1, handRotLeft_BT, colorPalette[7], colorPalette[17]);
   }
   
   popMatrix();
@@ -755,11 +1211,11 @@ void drawBudi(float x, float y, float xScale, float yScale, String stance)
   
   popMatrix();
 }
-void drawYanto(float x, float y, String stance)
+void drawYanto(float x, float y, float xScale, float yScale, String stance)
 {
   pushMatrix();
   translate(x, y);
-
+  scale(xScale, yScale);
   if (stance.toLowerCase().equals("sitting"))
   {
     drawArmBent(585, 410, -1, 0.9, handRotRight_Y, colorPalette[11], colorPalette[2]);
@@ -769,8 +1225,8 @@ void drawYanto(float x, float y, String stance)
   else if (stance.toLowerCase().equals("standing"))
   {
     drawArmStraight(585, 410, -1, 0.9, handRotLeft_Y, colorPalette[11], colorPalette[2]);
-    drawLegStraight(600, 465, -1.1, 1.1, -legRot_Y, colorPalette[1], colorPalette[5]);
-    drawLegStraight(555, 466, -1.1, 1.1, legRot_Y, colorPalette[7], colorPalette[5]);
+    drawLegStraight(605, 465, -1.1, 1.1, -legRot_Y, colorPalette[1], colorPalette[5]);
+    drawLegStraight(560, 466, -1.1, 1.1, legRot_Y, colorPalette[7], colorPalette[5]);
   }
 
   drawTorsoShirt(590, 415, -1, 1, torsoRot_Y);
@@ -783,7 +1239,7 @@ void drawYanto(float x, float y, String stance)
   }
   else if(stance.toLowerCase().equals("standing"))
   {
-    drawArmStraight(560, 395, -1.2, 1.1, handRotLeft_Y, colorPalette[11], colorPalette[2]);
+    drawArmStraight(560, 395, -1.2, 1.1, handRotRight_Y, colorPalette[11], colorPalette[2]);
   }
   popMatrix();
 }
@@ -869,7 +1325,7 @@ void drawHeadYanto(float x, float y, float xScale, float yScale, float angle)
 
   popMatrix();
 }
-void drawHeadSilhouette(float x, float y, float xScale, float yScale, float angle)
+void drawHeadBlind(float x, float y, float xScale, float yScale, float angle)
 {
   pushMatrix();
   translate(x, y);
@@ -877,23 +1333,83 @@ void drawHeadSilhouette(float x, float y, float xScale, float yScale, float angl
   scale(xScale, yScale);
   //Rambut
   fill(colorPalette[0]);
-  ellipse(2, -105, 115, 105);
+  strokeWeight(3.5);
+  stroke(colorPalette[0]);
+  createShape();
+  beginShape();
+  vertex(-55, -100);
+  bezierVertex(-70, -125, -50, -140,-55, -160);
+  vertex(25, -150);
+  bezierVertex( 50, -150, 75, -130, 60, -100);
+  vertex(0, -50);
+  endShape();
 
   //Wajah
   createShape();
   beginShape();
   strokeWeight(3.5);
   stroke(colorPalette[0]);
-  fill(colorPalette[2]);
+  fill(colorPalette[17]);
   vertex(44, -59);
   bezierVertex(27, -33, -37, -23, -55, -61);
-  bezierVertex(-59, -83, -59, -94, -54.25, -116);
-  bezierVertex(-27, -128, -52, -100, -16, -112);
+  bezierVertex(-59, -83, -59, -94, -48, -125);
+  bezierVertex(-27, -128, -52, -100, 0, -125);
   bezierVertex(35, -137, 5, -84, 29, -86);
   bezierVertex(42, -108, 74, -99, 65, -75);
   bezierVertex(63, -64, 55, -53, 36, -64);
   endShape();
+  
+  //Daun telinga
+  createShape();
+  beginShape();
+  strokeWeight(3.5);
+  stroke(colorPalette[0]);
+  fill(colorPalette[2]);
+  vertex(37, -80);
+  bezierVertex(40, -83, 46, -91, 56, -85);
+  endShape();
+  //Lubang telinga
+  createShape();
+  beginShape();
+  vertex(47, -84);
+  bezierVertex(40, -83, 46, -91, 48, -76);
+  endShape();
+  
+  //Kacamata
+    pushMatrix();
+    translate(0, -5);
+    beginShape();
+    strokeWeight(3.5);
+    stroke(colorPalette[0]);
+    fill(colorPalette[0]);
+    vertex(-65, -85);
+    bezierVertex(-65, -90, -55, -95, -40, -90);
+    bezierVertex(-45, -70, -65, -70, -65, -85);
+    endShape();
+    
+    beginShape();
+    vertex(-40, -90);
+    vertex(-30, -90);
+    endShape();
+    
+    beginShape();
+    scale(-1, 1);
+    vertex(5, -85);
+    bezierVertex(5, -90, 15, -95, 30, -90);
+    bezierVertex(25, -70, 5, -70, 5, -85);
+    endShape();
+    popMatrix();
+    
+  
+    
+  //Mulut
+  pushMatrix();
+  translate(-5, 0);
+  line(-30, -64, -16, -64);
   popMatrix();
+  popMatrix();
+  
+  
 }
 void drawHeadBudi(float x, float y, float xScale, float yScale, float angle)
 {
@@ -1002,7 +1518,7 @@ void drawTorsoShirt(float x, float y, float xScale, float yScale, float angle)
 
   popMatrix();
 }
-void drawTorsoSilhouette(float x, float y, float xScale, float yScale, float angle)
+void drawTorsoBlind(float x, float y, float xScale, float yScale, float angle)
 {
   pushMatrix();
   translate(x, y);
@@ -1014,10 +1530,11 @@ void drawTorsoSilhouette(float x, float y, float xScale, float yScale, float ang
   beginShape();
   strokeWeight(3.5);
   stroke(colorPalette[0]);
-  fill(colorPalette[0]);
+  fill(colorPalette[1]);
   vertex(-60, 72);
   bezierVertex(-80, -68, 107, -53, 70, 72);
   endShape(CLOSE);
+  
   popMatrix();
 }
 void drawTorsoSuit(float x, float y, float xScale, float yScale, float angle)
