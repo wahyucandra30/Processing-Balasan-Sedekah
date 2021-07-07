@@ -1,7 +1,7 @@
 import processing.sound.*;
 
 SoundFile s_clock_ticking, s_office_ambience, s_ding, s_typewriter, s_office_radio, s_swish,
-          s_budi_s1_1, s_budi_s1_2, s_budi_s1_3, s_birds, s_street_ambience, s_huh;
+          s_budi_s1_1, s_budi_s1_2, s_budi_s1_3, s_birds, s_street_ambience, s_huh, s_outro;
 float fadeVolume_office_radio = 0.5;
 
 int[] colorPalette = {#2a2329,#454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce,
@@ -9,7 +9,7 @@ int[] colorPalette = {#2a2329,#454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af90
                       #6b3b1a, #925122};
 color bgCol;
                       
-PFont defaultFont, font1, font2, font3, font4, font5_outline, font5_fill;
+PFont defaultFont, font1, font2, font3, font4, font5_outline, font5_fill, font_arabic;
 String text1 = "PAK BUDI";
 String text2 = "Jabatan: Regional Manager";
 String text3 = "Motto: \"Aku cinta uang.\"";
@@ -24,13 +24,29 @@ String text11 = "Itu kan Yanto...";
 String text12 = "Bukannya gajinya tadi kupotong?";
 String text13 = "Halo Pak Budi...";
 String text14 = "Ada apa ya?";
+String text15 = "Gaji kamu kan habis kena potong...";
+String text16 = "Kok malah memberi sumbangan?";
+String text17 = "Apa tidak takut jatuh miskin?";
+String text18 = "Oh..";
+String text19 = "Justru sebaliknya Pak Budi...";
+String text20 = "Allah akan melipatgandakan sedekah kita";
+String text21 = "Wah kalau begitu...";
+String text22 = "Saya akan perbanyak sedekah...";
+String text23 = "Ternyata Allah memang yang Maha Pengasih";
+String text24 = "Motto: \"Aku cinta sedekah.\"";
+String dalil1 = "اِنَّ الْمُصَّدِّقِيْنَ وَالْمُصَّدِّقٰتِ وَاَقْرَضُوا اللّٰهَ قَرْضًا حَسَنًا";
+String dalil2 = "يُّضٰعَفُ لَهُمْ وَلَهُمْ اَجْرٌ كَرِيْمٌ";
+String dalil3 = "Sesungguhnya orang-orang yang bersedekah baik laki-laki maupun perempuan";
+String dalil4 = "dan meminjamkan kepada Allah dengan pinjaman yang baik,";
+String dalil5 = "akan dilipatgandakan (balasannya) bagi mereka; dan mereka akan mendapat pahala yang mulia.";
+
 float eyeWidth_B = 14, eyeHeight_B = 15, eyeWidth_Y = 14, eyeHeight_Y = 15;
 int[] blinkIntervals = {60, 60, 90, 120};
-int counter = 7900;
+int counter = 0;
 int textCounter = 0;
 
 color fadeInAlpha1 = 255, fadeInAlpha2 = 255;
-color fadeOutAlpha1 = 0, fadeOutAlpha2 = 0;
+color fadeOutAlpha1 = 0, fadeOutAlpha2 = 0, fadeOutAlpha3 = 0;
 float secondHandAngle = 90;
 
 PVector bgDis1 = new PVector(0, 0), bgDis2 = new PVector(0, 0), bgDis3 = new PVector(0, 0);
@@ -65,6 +81,7 @@ void setup()
   s_birds = new SoundFile(this, "sounds/birds.wav");
   s_street_ambience = new SoundFile(this, "sounds/street-ambience.wav");
   s_huh = new SoundFile(this, "sounds/huh.wav");
+  s_outro = new SoundFile(this, "sounds/outro.mp3");
   defaultFont = createFont("fonts/Lucida Sans.ttf", 48);
   font1 = createFont("fonts/Heathergreen-XPPG.ttf", 48);
   font2 = createFont("fonts/AgentOrange.ttf", 48);
@@ -72,7 +89,9 @@ void setup()
   font4 = createFont("fonts/SomeTimeLater.otf", 48);
   font5_outline = createFont("fonts/SF Slapstick Comic Shaded.ttf", 120);
   font5_fill = createFont("fonts/SF Slapstick Comic Bold.ttf", 120);
+  font_arabic = createFont("Farisi-48",48);
   bgCol = colorPalette[14];
+  mouthVerts_Y = new float[]{-30, -64, -28, -56, -18, -56, -16, -64};
 }
 void draw()
 {
@@ -118,14 +137,37 @@ void draw()
   {
     drawScene2D(20, 113);
   }
-  else if(frameToSec(counter) < 140)
+  else if(frameToSec(counter) < 143)
   {
-    drawScene2E(7, 133);
+    drawScene2F(10, 133);
   }
-  //*/
-  
-  //drawScene1B(14, 0);
-  //drawScene1C(30, 0);  
+  else if(frameToSec(counter) < 155)
+  {
+    drawScene2G(12, 143);
+  }
+  else if(frameToSec(counter) < 180)
+  {
+    drawScene2H(25, 155);
+  }
+  else
+  {
+    fill(color(255));
+    rectMode(CENTER);
+    rect(width/2, height/2, width, height);
+    
+    textFont(font_arabic);
+    textSize(48);
+    textAlign(CENTER);
+    fill(color(0));
+    text(dalil1, width/2, height/2 - 25);
+    text(dalil2, width/2, height/2 + 25);
+    textFont(defaultFont);
+    textSize(24);
+    text(dalil3, width/2, height/2 + 85);
+    text(dalil4, width/2, height/2 + 110);
+    text(dalil5, width/2, height/2 + 135);
+    text("QS. Al-Hadid 57:18", width/2, height/2 + 165);
+  }
 }
 void drawScene1A(float duration, float position)
 {
@@ -222,6 +264,7 @@ void drawScene1C(float duration, float position)
   text("PRO: " + nf(progress, 0, 3), 20, 115);
   if(progress == 0)
   {
+    mouthVerts_Y = new float[]{-30, -64, -28, -56, -18, -56, -16, -64};
     textCounter = 0;
     s_office_radio.play();
   }
@@ -789,7 +832,6 @@ void drawScene2C(float duration, float position)
     }
     
   }
-  
   filter(ERODE);
 }
 void drawScene2D(float duration, float position)
@@ -797,11 +839,9 @@ void drawScene2D(float duration, float position)
   float progress = (frameToSec(counter)-position)/duration;
   text("PRO: " + nf(progress, 0, 3), 20, 115);
   
-  if(progress < 0.05)
+  if(progress < 0.1)
   {
     fgDis.x = 0;
-    textCounter = 0;
-    mouthVerts_Y = new float[]{-30, -64, -28, -56, -18, -56, -16, -64};
   }
   
   if(progress > 0.1 && progress < 0.3)
@@ -980,6 +1020,11 @@ void drawScene2F(float duration, float position)
   float progress = (frameToSec(counter)-position)/duration;
   text("PRO: " + nf(progress, 0, 3), 20, 115);
   
+  if(progress < 0.05)
+  {
+    textCounter = 0;
+  }
+  
   headRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
   torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
   handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
@@ -992,23 +1037,188 @@ void drawScene2F(float duration, float position)
     textFont(font3);
     textSize(32);
     fill(colorPalette[0]);
-    if(progress < 0.2)
+    if(progress < 0.4)
     {
-      typewriteText(text10, 550, 300, 4, 0);
+      typewriteText(text15, 550, 300, 1, 0);
     }
-    else if(progress < 0.4)
+    else if(progress < 0.7)
     {
-      typewriteText(text11, 550, 300, 4, text10.length());
+      typewriteText(text16, 550, 300, 2, text15.length());
     }
-    else if(progress < 0.65)
+    else if(progress < 1)
     {
-      typewriteText(text12, 550, 300, 4, text10.length() + text11.length());
+      typewriteText(text17, 550, 300, 2, text15.length() + text16.length());
     }
-    
   }
-  
+  if(progress > 0.1 && progress < 0.102)
+  {
+    s_budi_s1_1.play();
+  }
+  if(progress > 0.4 && progress < 0.402)
+  {
+    s_budi_s1_2.play();
+  }
+  if(progress > 0.7 && progress < 0.702)
+  {
+    s_budi_s1_2.play();
+  }
 
   filter(ERODE);
+}
+void drawScene2G(float duration, float position)
+{
+  float progress = (frameToSec(counter)-position)/duration;
+  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  
+  headRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.3;
+  torsoRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.1;
+  handRotLeft_Y = -sin((norm(counter, 0, 1)/15f)) * 0.3;
+  handRotRight_Y = -sin((norm(counter, 0, 1)/15f)) * 0.3;
+  
+  drawYanto(2700, -700, -3, 3, "standing");
+  
+  if(progress < 0.05)
+  {
+    mouthVerts_Y = new float[]{-30, -64, -28, -56, -18, -56, -16, -64};
+    textCounter = 0;
+  }
+  
+  if(progress > 0.2)
+  {
+    textFont(font3);
+    textSize(32);
+    fill(colorPalette[0]);
+    if(progress < 0.4)
+    {
+      typewriteText(text18, 400, 300, 1, 0);
+    }
+    else if(progress < 0.7)
+    {
+      typewriteText(text19, 200, 300, 2, text18.length());
+    }
+    else if(progress < 1)
+    {
+      typewriteText(text20, 50, 300, 2, text18.length() + text19.length());
+    }
+  }
+  
+  filter(ERODE);
+}
+void drawScene2H(float duration, float position)
+{
+  float progress = (frameToSec(counter)-position)/duration;
+  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  
+  if(progress < 0.02)
+  {
+    textCounter = 0;
+  }
+  if(progress < 0.4)
+  {
+    headRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+    torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+    handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
+    handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
+    legRot_B = sin((norm(counter, 0, 1)/15f)) * 0;
+  }
+
+  
+  drawBudi(2000, -750, -3, 3,"standing");
+  if(progress > 0.05)
+  {
+    textFont(font3);
+    textSize(32);
+    fill(colorPalette[0]);
+    if(progress < 0.15)
+    {
+      typewriteText(text21, 550, 300, 1, 0);
+    }
+    else if(progress < 0.25)
+    {
+      typewriteText(text22, 550, 300, 2, text21.length());
+    }
+    else if(progress < 0.37)
+    {
+      typewriteText(text23, 500, 300, 2, text21.length() + text22.length());
+    }
+  }
+  if(progress > 0.4 && progress < 0.401)
+  {
+    s_ding.play();
+    s_street_ambience.stop();
+  }
+  if(progress > 0.05 && progress < 0.051)
+  {
+    s_budi_s1_1.play();
+  }
+  if(progress > 0.15 && progress < 0.151)
+  {
+    s_budi_s1_1.play();
+  }
+  if(progress > 0.25 && progress < 0.251)
+  {
+    s_budi_s1_3.play();
+  }
+
+  if(progress > 0.37 && progress < 0.4)
+  {
+    textCounter = 0;
+  }
+  if(progress > 0.4)
+  {
+      textSize(48);
+      textFont(font2);
+      text(text1, 550, 275);
+      
+      textFont(font3);
+      if(progress > 0.45 && progress < 0.451)
+      {
+        s_typewriter.play();
+      }
+      if(progress > 0.45)
+      {
+        typewriteText(text2, 550, 340, 3, 0);
+      }
+      if(progress > 0.525)
+      {
+        typewriteText(text24, 550, 390, 3, text2.length());
+      }
+    filter(GRAY);
+  }
+  if(progress > 0.6 && progress < 0.601)
+  {
+    s_outro.amp(0.25);
+    s_outro.play();
+  }
+  if(progress > 0.65)
+  {
+    if(fadeOutAlpha3 < 255)
+    {
+      fadeOutAlpha3 += 2;
+    }
+    else
+    {
+      fadeOutAlpha3 = 255;
+    }
+  }
+  
+  filter(ERODE);
+  fill(color(255), fadeOutAlpha3);
+  rectMode(CENTER);
+  rect(width/2, height/2, width, height);
+  
+  textFont(font_arabic);
+  textSize(48);
+  textAlign(CENTER);
+  fill(color(0), fadeOutAlpha3);
+  text(dalil1, width/2, height/2 - 25);
+  text(dalil2, width/2, height/2 + 25);
+  textFont(defaultFont);
+  textSize(24);
+  text(dalil3, width/2, height/2 + 85);
+  text(dalil4, width/2, height/2 + 110);
+  text(dalil5, width/2, height/2 + 135);
+  text("QS. Al-Hadid 57:18", width/2, height/2 + 165);
 }
 void drawQuestionMark(float x, float y, float size)
 {
