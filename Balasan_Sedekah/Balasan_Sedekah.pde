@@ -7,10 +7,9 @@ float fadeVolume_office_radio = 0.5;
 int[] colorPalette = {#2a2329,#454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce,
                       #deeafa, #56ad7a, #eab353, #233f71, #546c96, #e9edf3, #d1d5db, #83858b, #f8a44e,
                       #6b3b1a, #925122};
-
 color bgCol;
                       
-PFont defaultFont, font1, font2, font3, font4;
+PFont defaultFont, font1, font2, font3, font4, font5_outline, font5_fill;
 String text1 = "PAK BUDI";
 String text2 = "Jabatan: Regional Manager";
 String text3 = "Motto: \"Aku cinta uang.\"";
@@ -19,14 +18,14 @@ String text5 = "Untuk menghemat pengeluaran perusahaan...";
 String text6 = "Gaji kamu bulan ini saya potong 10 persen";
 float eyeWidth_B = 14, eyeHeight_B = 15, eyeWidth_Y = 14, eyeHeight_Y = 15;
 int[] blinkIntervals = {60, 60, 90, 120};
-int counter = 0;
+int counter = 3100;
 int textCounter = 0;
 
 color fadeInAlpha1 = 255, fadeInAlpha2 = 255;
 color fadeOutAlpha1 = 0, fadeOutAlpha2 = 0;
 float secondHandAngle = 90;
 
-PVector bgDis1 = new PVector(0, 0), bgDis2 = new PVector(0, 0);
+PVector bgDis1 = new PVector(0, 0), bgDis2 = new PVector(0, 0), bgDis3 = new PVector(0, 0);
 PVector fgDis = new PVector(0, 0);
 //Pak Budi
 float headRot_B = 0, torsoRot_B = 0, handRotLeft_B = 0, handRotRight_B = 0, legRot_B = 0;
@@ -57,6 +56,8 @@ void setup()
   font2 = createFont("fonts/AgentOrange.ttf", 48);
   font3 = createFont("fonts/WigendaTypewrite.ttf", 48);
   font4 = createFont("fonts/SomeTimeLater.otf", 48);
+  font5_outline = createFont("fonts/SF Slapstick Comic Shaded.ttf", 120);
+  font5_fill = createFont("fonts/SF Slapstick Comic Bold.ttf", 120);
   bgCol = colorPalette[14];
 }
 void draw()
@@ -329,7 +330,7 @@ void drawScene1C(float duration, float position)
   rect(-1640, 370, 24, 200);
   
   drawDoor(-3470, 405, 270, 450);
-  drawDoorLabel(-3470, 125, 125, 50);
+  drawDoorLabel(-3470, 125, 125, 50, colorPalette[16], 4);
   
   drawVent(-2300, 575);
   
@@ -447,30 +448,95 @@ void drawScene2A(float duration, float position)
   }
   else if(progress < 6)
   {
+    bgDis3.x--;
     if(progress == 6)
     {
       bgDis2.x = 0;
     }
-    bgDis2.x--;
-    headRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
-    torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
-    handRotLeft_B = -sin((norm(counter, 0, 1)/15f)) * 20;
-    handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 20;
-    legRot_B = sin((norm(counter, 0, 1)/15f)) * 10;
+    if(progress < 0.8)
+    {
+      bgDis2.x--;
+      headRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+      torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
+      handRotLeft_B = -sin((norm(counter, 0, 1)/15f)) * 20;
+      handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 20;
+      legRot_B = sin((norm(counter, 0, 1)/15f)) * 10;
+    }
+    else if (progress < 0.82)
+    {
+      headRot_B = lerp(headRot_B, 0, frameToSec(counter)/1000);
+      torsoRot_B = lerp(torsoRot_B, 0, frameToSec(counter)/1000);
+      handRotLeft_B = lerp(handRotLeft_B, 0, frameToSec(counter)/1000);
+      handRotRight_B = -lerp(handRotLeft_B, 0, frameToSec(counter)/1000);
+      legRot_B = lerp(legRot_B, 0, frameToSec(counter)/1000);
+    } 
+    else
+    {
+      headRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+      torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
+      handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
+      handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
+      legRot_B = sin((norm(counter, 0, 1)/15f)) * 0;
+    }
+    
     
     pushMatrix();
     translate(bgDis2.x*4, bgDis2.y);
+    translate(-910, 0);
+    pushMatrix();
+    translate(-bgDis2.x*3, bgDis2.y);
+    strokeWeight(3);
+    drawSun2(2000, 100, 100);
+    translate(-bgDis3.x/2, 0);
+    drawCloud(2000, 180, -0.5, 0.5);
+    drawCloud(1200, 150, -0.5, 0.5);
+    drawCloud(1600, 225, -0.5, 0.5);
+    popMatrix();
+    
+    //Cityscape
+    pushMatrix();
+    translate(-bgDis2.x*2.5, bgDis2.y);
+    stroke(colorPalette[8]);
+    fill(colorPalette[4]);
+    rect(1500, 800, 200, 1000);
+    rect(1800, 600, 300, 1000);
+    rect(2000, 800, 300, 1000);
+    rect(2500, 700, 300, 1000);
+    rect(2300, 600, 200, 1000);
+    
+    popMatrix();
+    
+    fill(colorPalette[3]);
+    stroke(colorPalette[0]);
+    strokeWeight(7);
+    rect(3000 , 600, 3000, 350);
+    
     fill(colorPalette[14]);
     strokeWeight(6);
+    stroke(colorPalette[0]);
     rect(2750, 300, 150, 900);
     noStroke();
     fill(colorPalette[15]);
-    rect(2695, 300, 20, 900);
+    rect(2690, 300, 20, 900);
     stroke(colorPalette[0]);
     strokeWeight(6);
     
-    //drawHouseDoor(1250, 500, 350, 600);
+    
+    
+    rect(1600, 400, 1600, 500);
     rect(1250, 400, 1600, 900);
+    
+    drawHouseDoor(1250, 500, 350, 600);
+    drawDoorLabel(1275, 150, 125, 50, colorPalette[0], 6);
+    fill(colorPalette[9]);
+    rect(650, 350, 250, 200);
+    rect(875, 350, 250, 200);
+    rect(660, 0, 250, 200);
+    rect(875, 0, 250, 200);
+    rect(1600, 350, 250, 200);
+    rect(1850, 350, 250, 200);
+    rect(1600, 0, 250, 200);
+    rect(1850, 0, 250, 200);
     //Foliage
     fill(colorPalette[10]);
     stroke(colorPalette[0]);
@@ -482,6 +548,7 @@ void drawScene2A(float duration, float position)
     ellipse(2140, 600, 300, 300);
     ellipse(2400, 575, 250, 250);
     
+    fill(colorPalette[16]);
     rect(1250, 700, 400, 100);
     
     drawBrickWall(500, 650, 1200, 250, 70);
@@ -491,10 +558,28 @@ void drawScene2A(float duration, float position)
     popMatrix();
     drawBudi(1500, -400, -2, 2,"standing");
     drawSilhouette(600, -400, 2, -2, "standing");
+    if(progress > 0.83)
+    {
+      drawQuestionMark(550, 275, 120);
+    }
   }
   
   s_office_radio.amp(fadeVolume_office_radio);
   filter(ERODE);
+}
+void drawQuestionMark(float x, float y, float size)
+{
+  pushMatrix();
+  translate(x, y);
+  textSize(size);
+  textAlign(CENTER);
+  textFont(font5_fill);
+  fill(colorPalette[14]);
+  text("?", 0, 0);
+  textFont(font5_outline);
+  fill(colorPalette[0]);
+  text("?", 3, 0);
+  popMatrix();
 }
 void drawBrickWall(float x, float y, float w, float h, float d)
 {
@@ -1177,12 +1262,12 @@ void drawSun1(float x, float y)
   circle(0, 0, 50);
   popMatrix();
 }
-void drawDoorLabel(float x, float y, float w, float h)
+void drawDoorLabel(float x, float y, float w, float h, color strokeCol, int sw)
 {
   pushMatrix();
   translate(x, y);
-  stroke(colorPalette[16]);
-  strokeWeight(4);
+  stroke(strokeCol);
+  strokeWeight(sw);
   fill(colorPalette[14]);
   rect(0, 0, w, h); //Base
   fill(colorPalette[15]);
@@ -1201,7 +1286,7 @@ void drawHouseDoor(float x, float y, float w, float h)
   
   rect(w/2.2, 0, w/9.8, h); //Side
   strokeWeight(5);
-  circle(-w/4, 25, 25); //Handle
+  //circle(-w/4, 25, 25); //Handle
   popMatrix();
 }
 void drawDoor(float x, float y, float w, float h)
