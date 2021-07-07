@@ -444,6 +444,8 @@ void drawScene2A(float duration, float position)
   {
     fadeInAlpha1 = 255;
     fadeOutAlpha1 = 255;
+    textCounter = 0;
+    mouthVerts_Y = new float[]{-30, -64, -28, -56, -18, -56, -16, -64};
   }
   if(progress < 0.4)
   {
