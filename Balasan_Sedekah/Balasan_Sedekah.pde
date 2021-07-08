@@ -1,7 +1,8 @@
 import processing.sound.*;
 
 SoundFile s_clock_ticking, s_office_ambience, s_ding, s_typewriter, s_office_radio, s_swish,
-          s_budi_s1_1, s_budi_s1_2, s_budi_s1_3, s_birds, s_street_ambience, s_huh, s_outro;
+          s_budi_s1_1, s_budi_s1_2, s_budi_s1_3, s_birds, s_street_ambience, s_huh, s_outro,
+          s_yanto_s1_1, s_yanto_s1_2, s_yanto_s1_3;
 float fadeVolume_office_radio = 0.5;
 
 int[] colorPalette = {#2a2329,#454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af908c, #514b5e, #7eb0ce,
@@ -42,7 +43,7 @@ String dalil5 = "akan dilipatgandakan (balasannya) bagi mereka; dan mereka akan 
 
 float eyeWidth_B = 14, eyeHeight_B = 15, eyeWidth_Y = 14, eyeHeight_Y = 15;
 int[] blinkIntervals = {60, 60, 90, 120};
-int counter = 0;
+int counter = 7100;
 int textCounter = 0;
 
 color fadeInAlpha1 = 255, fadeInAlpha2 = 255;
@@ -51,6 +52,7 @@ float secondHandAngle = 90;
 
 PVector bgDis1 = new PVector(0, 0), bgDis2 = new PVector(0, 0), bgDis3 = new PVector(0, 0);
 PVector fgDis = new PVector(0, 0);
+PVector creditDis = new PVector(0,0);
 //Pak Budi
 float headRot_B = 0, torsoRot_B = 0, handRotLeft_B = 0, handRotRight_B = 0, legRot_B = 0;
 //Pak Yanto
@@ -78,6 +80,9 @@ void setup()
   s_budi_s1_1 = new SoundFile(this, "sounds/budi-s1-1.wav");
   s_budi_s1_2 = new SoundFile(this, "sounds/budi-s1-2.wav");
   s_budi_s1_3 = new SoundFile(this, "sounds/budi-s1-3.wav");
+  s_yanto_s1_1 = new SoundFile(this, "sounds/yanto-s1-1.wav");
+  s_yanto_s1_2 = new SoundFile(this, "sounds/yanto-s1-2.wav");
+  s_yanto_s1_3 = new SoundFile(this, "sounds/yanto-s1-3.wav");
   s_birds = new SoundFile(this, "sounds/birds.wav");
   s_street_ambience = new SoundFile(this, "sounds/street-ambience.wav");
   s_huh = new SoundFile(this, "sounds/huh.wav");
@@ -151,10 +156,23 @@ void draw()
   }
   else
   {
+    
+    headRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
+    torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
+    handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 60;
+    handRotRight_B = sin((norm(counter, 0, 1)/15f)) * 45;
+    
+    headRot_Y = sin((norm(counter, 0, 1)/15f)) * 3;
+    torsoRot_Y = sin((norm(counter, 0, 1)/15f)) * 3;
+    handRotLeft_Y = sin((norm(counter, 0, 1)/15f)) * 60;
+    handRotRight_Y = sin((norm(counter, 0, 1)/15f)) * 45;
+    
+    creditDis.y-= 0.3;
     fill(color(255));
     rectMode(CENTER);
     rect(width/2, height/2, width, height);
-    
+    pushMatrix();
+    translate(creditDis.x, creditDis.y * 2);
     textFont(font_arabic);
     textSize(48);
     textAlign(CENTER);
@@ -167,6 +185,20 @@ void draw()
     text(dalil4, width/2, height/2 + 110);
     text(dalil5, width/2, height/2 + 135);
     text("QS. Al-Hadid 57:18", width/2, height/2 + 165);
+    textSize(32);
+    text("Cast", width/2, height/2 + 500);
+    textSize(26);
+    text("Pak Budi", width/2 - 125, height/2 + 600);
+    textSize(24);
+    text("sebagai Pak Budi", width/2 + 50, height/2 + 600);
+    textSize(26);
+    text("Pak Yanto", width/2 - 130, height/2 + 650);
+    textSize(24);
+    text("sebagai Pak Yanto", width/2 + 50, height/2 + 650);
+    
+    drawBudi(width/3, height/2 + 325, 1, 1,"standing");
+    drawYanto(width/3 - 900, height/2 + 650, 1, 1,"standing");
+    popMatrix();
   }
 }
 void drawScene1A(float duration, float position)
@@ -768,17 +800,30 @@ void drawScene2B(float duration, float position)
     fill(colorPalette[0]);
     if(progress < 0.3)
     {
-      typewriteText(text7, 200, 160, 4, 0);
+      typewriteText(text7, 200, 160, 3, 0);
     }
     else if(progress < 0.6)
     {
-      typewriteText(text8, 200, 160, 4, text7.length());
+      typewriteText(text8, 200, 160, 3, text7.length());
     }
     else if(progress < 0.95)
     {
-      typewriteText(text9, 200, 160, 4, text7.length() + text8.length());
+      typewriteText(text9, 200, 160, 3, text7.length() + text8.length());
     }
   }
+  if(progress > 0.1 && progress < 0.101)
+  {
+    s_yanto_s1_1.play();
+  }
+  if(progress > 0.3 && progress < 0.301)
+  {
+    s_yanto_s1_2.play();
+  }
+  if(progress > 0.6 && progress < 0.601)
+  {
+    s_yanto_s1_3.play();
+  }
+  
   
   filter(ERODE);
 }
@@ -830,9 +875,20 @@ void drawScene2C(float duration, float position)
     }
     else if(progress < 0.65)
     {
-      typewriteText(text12, 550, 300, 4, text10.length() + text11.length());
+      typewriteText(text12, 550, 300, 3, text10.length() + text11.length());
     }
-    
+  }
+  if(progress > 0.1 && progress < 0.102)
+  {
+    s_budi_s1_1.play();
+  }
+  if(progress > 0.2 && progress < 0.202)
+  {
+    s_budi_s1_2.play();
+  }
+  if(progress > 0.4 && progress < 0.402)
+  {
+    s_budi_s1_3.play();
   }
   filter(ERODE);
 }
@@ -962,7 +1018,10 @@ void drawScene2D(float duration, float position)
   {
     drawYanto(1200, -200, -1.5, 1.5, "standing");
   }
-  
+  if(progress > 0.7 && progress < 0.701)
+  {
+    s_swish.play();
+  }
   drawBlind(-50, -200, 1.5, 1.5, "standing");
   
   if(progress > 0.45)
@@ -1103,6 +1162,18 @@ void drawScene2G(float duration, float position)
       typewriteText(text20, 50, 300, 2, text18.length() + text19.length());
     }
   }
+  if(progress > 0.2 && progress < 0.202)
+  {
+    s_yanto_s1_1.play();
+  }
+  if(progress > 0.4 && progress < 0.401)
+  {
+    s_yanto_s1_2.play();
+  }
+  if(progress > 0.7 && progress < 0.702)
+  {
+    s_yanto_s1_3.play();
+  }
   
   filter(ERODE);
 }
@@ -1187,7 +1258,7 @@ void drawScene2H(float duration, float position)
       }
     filter(GRAY);
   }
-  if(progress > 0.6 && progress < 0.601)
+  if(progress > 0.55 && progress < 0.551)
   {
     s_outro.amp(0.25);
     s_outro.play();
