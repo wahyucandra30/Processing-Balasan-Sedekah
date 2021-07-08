@@ -10,7 +10,7 @@ int[] colorPalette = {#2a2329,#454050, #f0a984, #752438, #a8d9fe, #d0dac0, #af90
                       #6b3b1a, #925122};
 color bgCol;
                       
-PFont defaultFont, font1, font2, font3, font4, font5_outline, font5_fill, font_arabic;
+PFont defaultFont, defaultBold, defaultFont2,font1, font2, font3, font4, font5_outline, font5_fill, font_arabic;
 String text1 = "PAK BUDI";
 String text2 = "Jabatan: Regional Manager";
 String text3 = "Motto: \"Aku cinta uang.\"";
@@ -43,7 +43,9 @@ String dalil5 = "akan dilipatgandakan (balasannya) bagi mereka; dan mereka akan 
 
 float eyeWidth_B = 14, eyeHeight_B = 15, eyeWidth_Y = 14, eyeHeight_Y = 15;
 int[] blinkIntervals = {60, 60, 90, 120};
-int counter = 0;
+
+//Last frame: 13234
+int counter = 0; //Total frame dari awal
 int textCounter = 0;
 
 color fadeInAlpha1 = 255, fadeInAlpha2 = 255;
@@ -88,6 +90,8 @@ void setup()
   s_huh = new SoundFile(this, "sounds/huh.wav");
   s_outro = new SoundFile(this, "sounds/outro.mp3");
   defaultFont = createFont("fonts/Lucida Sans.ttf", 48);
+  defaultFont2 = createFont("fonts/Lucida Sans.ttf", 24);
+  defaultBold = createFont("fonts/LucidaSans-Bold.otf", 24);
   font1 = createFont("fonts/Heathergreen-XPPG.ttf", 48);
   font2 = createFont("fonts/AgentOrange.ttf", 48);
   font3 = createFont("fonts/WigendaTypewrite.ttf", 48);
@@ -155,7 +159,11 @@ void draw()
   }
   else
   {
-    
+    drawCredit();
+  }
+}
+void drawCredit()
+{
     headRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
     torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
     handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 60;
@@ -172,6 +180,9 @@ void draw()
     rect(width/2, height/2, width, height);
     pushMatrix();
     translate(creditDis.x, creditDis.y * 2);
+    drawBudi(width/3, height/2 + 325, 1, 1,"standing");
+    drawYanto(width/3 - 790, height/2 + 600, 1, 1,"standing");
+    filter(ERODE);
     textFont(font_arabic);
     textSize(48);
     textAlign(CENTER);
@@ -186,19 +197,56 @@ void draw()
     text("QS. Al-Hadid 57:18", width/2, height/2 + 165);
     textSize(32);
     text("Cast", width/2, height/2 + 500);
-    textSize(26);
-    text("Pak Budi", width/2 - 125, height/2 + 600);
-    textSize(24);
-    text("sebagai Pak Budi", width/2 + 50, height/2 + 600);
-    textSize(26);
-    text("Pak Yanto", width/2 - 130, height/2 + 650);
-    textSize(24);
-    text("sebagai Pak Yanto", width/2 + 50, height/2 + 650);
     
-    drawBudi(width/3, height/2 + 325, 1, 1,"standing");
-    drawYanto(width/3 - 800, height/2 + 650, 1, 1,"standing");
+    pushMatrix();
+    translate(20, 0);
+    textSize(24);
+    textFont(defaultBold);
+    text("Pak Budi", width/2 - 95, height/2 + 600);
+    textFont(defaultFont2);
+    text("as Pak Budi", width/2 + 50, height/2 + 600);
+    textFont(defaultBold);
+    text("Pak Yanto", width/2 - 110, height/2 + 650);
+    textFont(defaultFont2);
+    text("as Pak Yanto", width/2 + 50, height/2 + 650);
+    
+    textFont(defaultBold);
+    text("Directed By", width/2 - 130, height/2 + 750);
+    textFont(defaultFont2);
+    text("Wahyu Candra", width/2 + 50, height/2 + 750);
+    textFont(defaultBold);
+    text("Screenplay By", width/2 - 130, height/2 + 800);
+    textFont(defaultFont2);
+    text("Haykal Syuhada", width/2 + 80, height/2 + 800);
+    textFont(defaultBold);
+    text("Creative Advisor", width/2 - 140, height/2 + 850);
+    textFont(defaultFont2);
+    text("Faruq Zulfikar", width/2 + 80, height/2 + 850);
+    textFont(defaultBold);
+    text("Produced By", width/2 - 130, height/2 + 900);
+    textFont(defaultFont2);
+    text("Wahyu Candra", width/2 + 50, height/2 + 900);
+    textFont(defaultBold);
+    text("Director of Photography", width/2 - 150, height/2 + 950);
+    textFont(defaultFont2);
+    text("Wahyu Candra", width/2 + 110, height/2 + 950);
+    textFont(defaultBold);
+    text("Lead Programmer", width/2 - 130, height/2 + 1000);
+    textFont(defaultFont2);
+    text("Wahyu Candra", width/2 + 85, height/2 + 1000);
+    textFont(defaultBold);
+    text("Music By", width/2 - 110, height/2 + 1050);
+    textFont(defaultFont2);
+    text("Opick + Amanda", width/2 + 70, height/2 + 1050);
     popMatrix();
-  }
+    
+    text(counter, width/2, height/2 + 1300);
+    
+    textFont(defaultFont);
+    textSize(32);
+    text("Kelompok Bebas 2021", width/2, height/2 + 1200);
+    
+    popMatrix();
 }
 void drawScene1A(float duration, float position)
 {
@@ -388,7 +436,7 @@ void drawScene1C(float duration, float position)
   }
   if(progress > 0.62 && progress < 0.75)
   {
-    typewriteText(text5, 600, 250, 3, text4.length());
+    typewriteText(text5, 600, 250, 2, text4.length());
   }
   if(progress > 0.75 && progress < 0.751)
   {
@@ -396,7 +444,7 @@ void drawScene1C(float duration, float position)
   }
   if(progress > 0.75 && progress < 0.875)
   {
-    typewriteText(text6, 600, 250, 3, text4.length() + text5.length());
+    typewriteText(text6, 600, 250, 2, text4.length() + text5.length());
   }
   if(progress > 0.875)
   {
@@ -471,6 +519,16 @@ void drawScene2A(float duration, float position)
   float progress = (frameToSec(counter)-position)/duration;
   //text("PRO: " + nf(progress, 0, 3), 20, 115);
   bgCol = colorPalette[4];
+  float i = random(0, 3);
+  if (frameCount % blinkIntervals[(int) i] == 0)
+  {
+    eyeWidth_B = 19;
+    eyeHeight_B = 4;
+  } else
+  {
+    eyeWidth_B = 14;
+    eyeHeight_B = 15;
+  }
   if(progress < 0.1)
   {
     fadeInAlpha1 = 255;
@@ -714,6 +772,17 @@ void drawScene2B(float duration, float position)
   float progress = (frameToSec(counter)-position)/duration;
   //text("PRO: " + nf(progress, 0, 3), 20, 115);
   
+  float j = random(0, 3);
+  if (frameCount % blinkIntervals[(int) j] == 0)
+  {
+    eyeWidth_Y = 19;
+    eyeHeight_Y = 4;
+  } else
+  {
+    eyeWidth_Y = 14;
+    eyeHeight_Y = 15;
+  }
+  
   headRot_BT = sin((norm(counter, 0, 1)/15f)) * 1.2;
   torsoRot_BT = sin((norm(counter, 0, 1)/15f)) * 1.2;
   handRotLeft_BT = sin((norm(counter, 0, 1)/15f)) * 0.2 + 30;
@@ -814,7 +883,7 @@ void drawScene2B(float duration, float position)
   {
     s_yanto_s1_1.play();
   }
-  if(progress > 0.3 && progress < 0.301)
+  if(progress > 0.3 && progress < 0.302)
   {
     s_yanto_s1_2.play();
   }
@@ -830,6 +899,17 @@ void drawScene2C(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
   //text("PRO: " + nf(progress, 0, 3), 20, 115);
+  
+  float i = random(0, 3);
+  if (frameCount % blinkIntervals[(int) i] == 0)
+  {
+    eyeWidth_B = 19;
+    eyeHeight_B = 4;
+  } else
+  {
+    eyeWidth_B = 14;
+    eyeHeight_B = 15;
+  }
   
   if(progress < 0.05)
   {
@@ -895,6 +975,27 @@ void drawScene2D(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
   //text("PRO: " + nf(progress, 0, 3), 20, 115);
+  
+  float i = random(0, 1);
+  float j = random(0, 3);
+  if (frameCount % blinkIntervals[(int) i] == 0)
+  {
+    eyeWidth_B = 19;
+    eyeHeight_B = 4;
+  } else
+  {
+    eyeWidth_B = 14;
+    eyeHeight_B = 15;
+  }
+  if (frameCount % blinkIntervals[(int) j] == 0)
+  {
+    eyeWidth_Y = 19;
+    eyeHeight_Y = 4;
+  } else
+  {
+    eyeWidth_Y = 14;
+    eyeHeight_Y = 15;
+  }
   
   if(progress < 0.1)
   {
@@ -1046,6 +1147,17 @@ void drawScene2E(float duration, float position)
   float progress = (frameToSec(counter)-position)/duration;
   //text("PRO: " + nf(progress, 0, 3), 20, 115);
   
+  float j = random(0, 3);
+  if (frameCount % blinkIntervals[(int) j] == 0)
+  {
+    eyeWidth_Y = 19;
+    eyeHeight_Y = 4;
+  } else
+  {
+    eyeWidth_Y = 14;
+    eyeHeight_Y = 15;
+  }
+  
   headRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.3;
   torsoRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.1;
   handRotLeft_Y = -sin((norm(counter, 0, 1)/15f)) * 0.3;
@@ -1079,6 +1191,17 @@ void drawScene2F(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
   //text("PRO: " + nf(progress, 0, 3), 20, 115);
+  
+  float i = random(0, 3);
+  if (frameCount % blinkIntervals[(int) i] == 0)
+  {
+    eyeWidth_B = 19;
+    eyeHeight_B = 4;
+  } else
+  {
+    eyeWidth_B = 14;
+    eyeHeight_B = 15;
+  }
   
   if(progress < 0.05)
   {
@@ -1130,6 +1253,17 @@ void drawScene2G(float duration, float position)
   float progress = (frameToSec(counter)-position)/duration;
   //text("PRO: " + nf(progress, 0, 3), 20, 115);
   
+  float j = random(0, 3);
+  if (frameCount % blinkIntervals[(int) j] == 0)
+  {
+    eyeWidth_Y = 19;
+    eyeHeight_Y = 4;
+  } else
+  {
+    eyeWidth_Y = 14;
+    eyeHeight_Y = 15;
+  }
+  
   headRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.3;
   torsoRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.1;
   handRotLeft_Y = -sin((norm(counter, 0, 1)/15f)) * 0.3;
@@ -1180,13 +1314,23 @@ void drawScene2H(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
   //text("PRO: " + nf(progress, 0, 3), 20, 115);
-  
   if(progress < 0.02)
   {
     textCounter = 0;
   }
   if(progress < 0.4)
   {
+    float i = random(0, 3);
+    if (frameCount % blinkIntervals[(int) i] == 0)
+    {
+      eyeWidth_B = 19;
+      eyeHeight_B = 4;
+    } else
+    {
+      eyeWidth_B = 14;
+      eyeHeight_B = 15;
+    }
+    
     headRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
     torsoRot_B = sin((norm(counter, 0, 1)/15f)) * 1.2;
     handRotLeft_B = sin((norm(counter, 0, 1)/15f)) * 0.2;
