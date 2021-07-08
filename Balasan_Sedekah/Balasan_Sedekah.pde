@@ -43,7 +43,7 @@ String dalil5 = "akan dilipatgandakan (balasannya) bagi mereka; dan mereka akan 
 
 float eyeWidth_B = 14, eyeHeight_B = 15, eyeWidth_Y = 14, eyeHeight_Y = 15;
 int[] blinkIntervals = {60, 60, 90, 120};
-int counter = 7100;
+int counter = 0;
 int textCounter = 0;
 
 color fadeInAlpha1 = 255, fadeInAlpha2 = 255;
@@ -102,16 +102,15 @@ void draw()
 {
   counter++;
   background(bgCol);
-  ///*
   
+  //Debug
   textFont(defaultFont);
   textSize(18);
   textAlign(LEFT);
   fill(color(0));
-  text("FPS: " + round(frameRate), 20, 55);
-  text("ET: " + nf(frameToSec(counter), 0, 2), 20, 75);
-  text("TC: " + textCounter, 20, 95);
-  //*/
+  //text("FPS: " + round(frameRate), 20, 55);
+  //text("ET: " + nf(frameToSec(counter), 0, 2), 20, 75);
+  //text("TC: " + textCounter, 20, 95);
   
   ///*
   if(frameToSec(counter) < 10)
@@ -197,14 +196,14 @@ void draw()
     text("sebagai Pak Yanto", width/2 + 50, height/2 + 650);
     
     drawBudi(width/3, height/2 + 325, 1, 1,"standing");
-    drawYanto(width/3 - 900, height/2 + 650, 1, 1,"standing");
+    drawYanto(width/3 - 800, height/2 + 650, 1, 1,"standing");
     popMatrix();
   }
 }
 void drawScene1A(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
-  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  //text("PRO: " + nf(progress, 0, 3), 20, 115);
   drawClock(width/2, height/2 + 50);
   filter(ERODE);
   textSize(48);
@@ -237,7 +236,7 @@ void drawScene1A(float duration, float position)
 void drawScene1B(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
-  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  //text("PRO: " + nf(progress, 0, 3), 20, 115);
   if(progress == 0)
   {
     s_office_ambience.amp(0.25);
@@ -293,7 +292,7 @@ void drawScene1B(float duration, float position)
 void drawScene1C(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
-  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  //text("PRO: " + nf(progress, 0, 3), 20, 115);
   if(progress == 0)
   {
     mouthVerts_Y = new float[]{-30, -64, -28, -56, -18, -56, -16, -64};
@@ -470,7 +469,7 @@ void drawScene1C(float duration, float position)
 void drawScene2A(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
-  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  //text("PRO: " + nf(progress, 0, 3), 20, 115);
   bgCol = colorPalette[4];
   if(progress < 0.1)
   {
@@ -713,7 +712,7 @@ void drawScene2A(float duration, float position)
 void drawScene2B(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
-  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  //text("PRO: " + nf(progress, 0, 3), 20, 115);
   
   headRot_BT = sin((norm(counter, 0, 1)/15f)) * 1.2;
   torsoRot_BT = sin((norm(counter, 0, 1)/15f)) * 1.2;
@@ -830,7 +829,7 @@ void drawScene2B(float duration, float position)
 void drawScene2C(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
-  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  //text("PRO: " + nf(progress, 0, 3), 20, 115);
   
   if(progress < 0.05)
   {
@@ -895,7 +894,7 @@ void drawScene2C(float duration, float position)
 void drawScene2D(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
-  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  //text("PRO: " + nf(progress, 0, 3), 20, 115);
   
   if(progress < 0.1)
   {
@@ -1045,7 +1044,7 @@ void drawScene2D(float duration, float position)
 void drawScene2E(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
-  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  //text("PRO: " + nf(progress, 0, 3), 20, 115);
   
   headRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.3;
   torsoRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.1;
@@ -1079,7 +1078,7 @@ void drawScene2E(float duration, float position)
 void drawScene2F(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
-  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  //text("PRO: " + nf(progress, 0, 3), 20, 115);
   
   if(progress < 0.05)
   {
@@ -1129,7 +1128,7 @@ void drawScene2F(float duration, float position)
 void drawScene2G(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
-  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  //text("PRO: " + nf(progress, 0, 3), 20, 115);
   
   headRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.3;
   torsoRot_Y = -sin((norm(counter, 0, 1)/15f)) * 1.1;
@@ -1180,7 +1179,7 @@ void drawScene2G(float duration, float position)
 void drawScene2H(float duration, float position)
 {
   float progress = (frameToSec(counter)-position)/duration;
-  text("PRO: " + nf(progress, 0, 3), 20, 115);
+  //text("PRO: " + nf(progress, 0, 3), 20, 115);
   
   if(progress < 0.02)
   {
