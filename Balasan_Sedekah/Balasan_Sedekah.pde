@@ -1,4 +1,6 @@
 import processing.sound.*;
+import com.hamoid.*;
+VideoExport videoExport;
 
 SoundFile s_clock_ticking, s_office_ambience, s_ding, s_typewriter, s_office_radio, s_swish,
           s_budi_s1_1, s_budi_s1_2, s_budi_s1_3, s_birds, s_street_ambience, s_huh, s_outro,
@@ -68,7 +70,7 @@ void setup()
 {
   size(1280, 720);
   smooth(8);  
-  frameRate(60);
+  //frameRate(60);
   strokeWeight(3.5);
   hint(ENABLE_STROKE_PURE);
   strokeCap(ROUND);
@@ -88,7 +90,7 @@ void setup()
   s_birds = new SoundFile(this, "sounds/birds.wav");
   s_street_ambience = new SoundFile(this, "sounds/street-ambience.wav");
   s_huh = new SoundFile(this, "sounds/huh.wav");
-  s_outro = new SoundFile(this, "sounds/outro.mp3");
+  s_outro = new SoundFile(this, "sounds/outro.wav");  
   defaultFont = createFont("fonts/Lucida Sans.ttf", 48);
   defaultFont2 = createFont("fonts/Lucida Sans.ttf", 24);
   defaultBold = createFont("fonts/LucidaSans-Bold.otf", 24);
@@ -101,9 +103,15 @@ void setup()
   font_arabic = createFont("Farisi-48",48);
   bgCol = colorPalette[14];
   mouthVerts_Y = new float[]{-30, -64, -28, -56, -18, -56, -16, -64};
+  
+  //Video Export
+  videoExport = new VideoExport(this, "Balasan_Sedekah.mp4");
+  videoExport.setFrameRate(60);
+  videoExport.startMovie();
 }
 void draw()
 {
+  frameRate = 60;
   counter++;
   background(bgCol);
   
@@ -161,7 +169,17 @@ void draw()
   {
     drawCredit();
   }
+  videoExport.saveFrame();
+  
 }
+void keyPressed() 
+{
+  if (key == 'q') 
+  {
+    videoExport.endMovie();
+    exit();
+  }
+}    
 void drawCredit()
 {
     headRot_B = sin((norm(counter, 0, 1)/15f)) * 3;
@@ -240,7 +258,7 @@ void drawCredit()
     text("Opick + Amanda", width/2 + 70, height/2 + 1050);
     popMatrix();
     
-    text(counter, width/2, height/2 + 1300);
+    //text(counter, width/2, height/2 + 1300);
     
     textFont(defaultFont);
     textSize(32);
