@@ -2,6 +2,8 @@ import processing.sound.*;
 import com.hamoid.*;
 VideoExport videoExport;
 
+//WARNING Semua kode jadi satu file sampai ribuan baris. Saya sedang lelah waktu mengerjakan ini, jangan ditiru ya!
+
 SoundFile s_clock_ticking, s_office_ambience, s_ding, s_typewriter, s_office_radio, s_swish,
           s_budi_s1_1, s_budi_s1_2, s_budi_s1_3, s_birds, s_street_ambience, s_huh, s_outro,
           s_yanto_s1_1, s_yanto_s1_2, s_yanto_s1_3;
